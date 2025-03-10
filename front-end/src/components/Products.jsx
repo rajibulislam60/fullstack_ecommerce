@@ -1,14 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Products = () => {
+const Products = ({products}) => {
   return (
     <div>
       <div className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-md border border-gray-100 bg-white shadow-md">
         <Link className="relative mx-1 mt-1 flex h-auto overflow-hidden rounded-none lg:h-60">
           <img
             className="object-cover"
-            src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
+            src={products?products.image:`https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60`}
             alt="product image"
           />
           <span className="absolute left-0 top-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
@@ -18,15 +18,15 @@ const Products = () => {
         <div className="mt-4 px-5 pb-5">
           <Link>
             <h5 className="text-slate-900 tracking-tight sm:text-[12px] md:text-[14px] lg:text-xl">
-              Nike Air MX - Red
+              {products?products.name:`Nike Air MX - Red`}
             </h5>
           </Link>
           <div className="mb-5 mt-2 items-center justify-between xl:flex">
             <p>
               <span className="text-slate-900 sm:[14px] md:[16px] font-bold lg:text-2xl">
-                $449
+              {products?products.discountPrice:`500`}
               </span>
-              <span className="text-slate-900 text-sm line-through">$699</span>
+              <span className="text-slate-900 text-sm line-through">{products?products.sellingPrice:`500`}</span>
             </p>
             <div className="flex items-center">
               <svg

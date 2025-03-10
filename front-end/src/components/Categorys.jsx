@@ -4,33 +4,6 @@ import axios from "axios";
 
 
 const Categorys = () => {
-  // let categoryData = [
-  //   {
-  //     id: 1,
-  //     name: "Shirt",
-  //     image:
-  //       "https://img.drz.lazcdn.com/static/bd/p/3a8b2c2859bfed6b25c38079306df287.jpg_720x720q80.jpg_.webp",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "T-Shirt",
-  //     image:
-  //       "https://img.drz.lazcdn.com/static/bd/p/ef9220f603fbbab7c315ef538e0724f7.jpg_400x400q75.jpg_.webp",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Laptop",
-  //     image:
-  //       "https://img.drz.lazcdn.com/static/bd/p/d18aa0baf101158c378653906a3f7f6f.jpg_400x400q75.jpg_.webp",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Computer",
-  //     image:
-  //       "https://img.drz.lazcdn.com/static/bd/p/c95af7f8b71e8a44cf931cebf86d99aa.jpg_400x400q75.jpg_.webp",
-  //   },
-  // ];
-
   const [allCategories, setAllCategories] = useState([]);
 
   useEffect(() => {

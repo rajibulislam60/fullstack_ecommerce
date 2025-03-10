@@ -1,11 +1,29 @@
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import Products from "./Products";
-
-const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+import axios from "axios";
 
 function Paginate({ itemsPerPage }) {
   const [itemOffset, setItemOffset] = useState(0);
+
+  const [allProducts, setAllProducts] = useState([]);
+
+  const items = allProducts;
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/v1/product/allproduct",
+      );
+      setAllProducts(response.data.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
   function Items({ currentItems }) {
     return (
@@ -13,7 +31,7 @@ function Paginate({ itemsPerPage }) {
         {currentItems &&
           currentItems.map((item) => (
             <div>
-              <Products />
+              <Products key={item._id} products={item} />
             </div>
           ))}
       </>
@@ -21,7 +39,7 @@ function Paginate({ itemsPerPage }) {
   }
 
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+
   const currentItems = items.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(items.length / itemsPerPage);
 
@@ -35,7 +53,9 @@ function Paginate({ itemsPerPage }) {
 
   return (
     <>
-      <Items currentItems={currentItems} />
+      <div className="mb-12 grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
+        <Items currentItems={currentItems} />
+      </div>
       <ReactPaginate
         breakLabel="..."
         nextLabel="Next"
@@ -43,10 +63,10 @@ function Paginate({ itemsPerPage }) {
         onPageChange={handlePageClick}
         pageRangeDisplayed={5}
         pageCount={pageCount}
-        containerClassName="flex gap-3"
+        containerClassName="flex gap-3 px-2"
         previousLabel="Previous"
         renderOnZeroPageCount={null}
-        activeClassName="px-2 py-1 text-white bg-[#000000]"
+        activeClassName="px-2 py-1 text-white bg-red-500"
         previousClassName="bg-teal-500 px-2 py-1 text-white"
         pageClassName="bg-teal-500 px-2 py-1 text-white"
       />
