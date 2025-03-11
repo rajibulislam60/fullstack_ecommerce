@@ -21,14 +21,14 @@ const Products = ({products}) => {
               {products?products.name:`Nike Air MX - Red`}
             </h5>
           </Link>
-          <div className="mb-5 mt-2 items-center justify-between xl:flex">
+          <div className="mb-5 mt-2 items-center justify-between">
             <p>
-              <span className="text-slate-900 sm:[14px] md:[16px] font-bold lg:text-2xl">
-              {products?products.discountPrice:`500`}
+              <span className="text-slate-900 sm:[14px] md:[16px] font-bold lg:text-2xl mr-1">
+              {products?products.discountPrice:`500`} TK
               </span>
-              <span className="text-slate-900 text-sm line-through">{products?products.sellingPrice:`500`}</span>
+              <span className="text-slate-900 text-sm line-through">{products?products.sellingPrice:`500`} TK</span>
             </p>
-            <div className="flex items-center">
+            <div className="flex items-center mt-3">
               <svg
                 aria-hidden="true"
                 className="h-5 w-5 text-yellow-300"

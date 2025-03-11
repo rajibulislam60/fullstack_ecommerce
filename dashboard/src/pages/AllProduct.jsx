@@ -56,9 +56,11 @@ const AllProduct = () => {
   };
 
   const getCategoryName = (categoryId) => {
-    const category = categories.find((category) => category._id);
-    let categoryName = category._id == categoryId;
-    return categoryName ? category.name : "No Category";
+    const id = Array.isArray(categoryId) ? categoryId[0] : categoryId;
+
+    const category = categories.find((cate) => cate._id === id);
+
+    return category ? category.name : "No Category";
   };
 
   const filteredProducts = products.filter((product) =>
