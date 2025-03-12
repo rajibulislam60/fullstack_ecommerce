@@ -118,6 +118,7 @@ async function singleCategoryController(req, res) {
   }
 }
 
+
 module.exports = {
   CreateCategoryController,
   deleteCategoryController,

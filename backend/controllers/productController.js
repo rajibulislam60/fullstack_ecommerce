@@ -81,8 +81,20 @@ async function allProductController(req, res) {
   }
 }
 
+async function byCategoryProductController(req, res) {
+  const { id } = req.params;
+  try {
+    const products = await productModel.find({ category: id });
+    res.status(200).json({ data: products });
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching products by category" });
+  }
+}
+
+
 module.exports = {
   addProductController,
   deleteProductController,
   allProductController,
+  byCategoryProductController
 };
