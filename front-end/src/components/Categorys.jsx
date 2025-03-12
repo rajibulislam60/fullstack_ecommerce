@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Container from "./Container";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Categorys = () => {
   const [allCategories, setAllCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCategories();
@@ -52,6 +54,11 @@ const Categorys = () => {
       </div>
     );
   };
+
+  const handleCategoryClick=(categoryId)=>{
+    navigate(`/shop/${categoryId}`)
+  }
+  
   return (
     <section>
       <Container>
@@ -63,6 +70,7 @@ const Categorys = () => {
             ) : (
               allCategories.map((item) => (
                 <div
+                onClick={()=>handleCategoryClick(item._id)}
                   key={item.id}
                   className="rounded-md border text-center shadow-md transition hover:shadow-lg"
                 >
