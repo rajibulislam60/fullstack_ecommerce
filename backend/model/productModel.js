@@ -40,7 +40,7 @@ let productSchema = new Schema(
       type: Number,
     },
     isFeature:{
-      type:Boolen,
+      type: Boolean,
       default: false
     },
   },
