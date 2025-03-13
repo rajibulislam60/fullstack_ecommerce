@@ -1,9 +1,12 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { userLoginInfo } from "../slices/userSlice";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router";
 // import Cookies from "js-cookie";
 
 const Login = () => {
+  const dispatch = useDispatch()
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [error, setError] = useState("");
@@ -21,6 +24,7 @@ const Login = () => {
       )
       .then((data) => {
         console.log(data)
+        dispatch(userLoginInfo(data.data.data))
           // Cookies.set(
           //   "user",
           //   String(data.data.data.role + data.data.data._id),
