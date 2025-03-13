@@ -39,6 +39,10 @@ let productSchema = new Schema(
     discountPrice: {
       type: Number,
     },
+    isFeature:{
+      type:Boolen,
+      default: false
+    },
   },
   {
     timestamps: true,

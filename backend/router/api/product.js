@@ -4,6 +4,7 @@ const {
   deleteProductController,
   allProductController,
   byCategoryProductController,
+  featureProductController,
 } = require("../../controllers/productController");
 const router = express.Router();
 const multer = require("multer");
@@ -50,5 +51,7 @@ router.delete("/deleteproduct/:id", authMiddleware, deleteProductController);
 router.get("/allproduct", allProductController);
 
 router.get("/byCategory/:id", byCategoryProductController);
+
+router.get("/isfeature", featureProductController);
 
 module.exports = router;
