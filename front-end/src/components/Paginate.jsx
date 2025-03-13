@@ -1,29 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
 import Products from "./Products";
-import axios from "axios";
 
-function Paginate({ itemsPerPage }) {
+function Paginate({ itemsPerPage, allProducts }) {
   const [itemOffset, setItemOffset] = useState(0);
-
-  const [allProducts, setAllProducts] = useState([]);
-
   const items = allProducts;
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/v1/product/allproduct",
-      );
-      setAllProducts(response.data.data);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
 
   function Items({ currentItems }) {
     return (
@@ -66,7 +47,7 @@ function Paginate({ itemsPerPage }) {
         containerClassName="flex gap-3 px-2"
         previousLabel="Previous"
         renderOnZeroPageCount={null}
-        activeClassName="px-2 py-1 text-white bg-red-500"
+        activeClassName="px-2 py-1 text-white bg-teal-900"
         previousClassName="bg-teal-500 px-2 py-1 text-white"
         pageClassName="bg-teal-500 px-2 py-1 text-white"
       />
