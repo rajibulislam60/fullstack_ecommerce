@@ -1,24 +1,50 @@
 import React, { useEffect, useState } from "react";
-import { Slider } from "@material-tailwind/react";
 import axios from "axios";
 
 const Sidebar = () => {
-   const [allCategories, setAllCategories] = useState([]);
-  
-    useEffect(() => {
-      fetchCategories();
-    }, []);
-  
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/v1/category/allCategory",
-        );
-        setAllCategories(response.data.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
+  const [allCategories, setAllCategories] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+  const [maxValue, setMaxValue] = useState(500000);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/v1/product/allproduct",
+      );
+      setAllProducts(response.data.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/v1/category/allCategory",
+      );
+      setAllCategories(response.data.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  const handlePriceFilter = (e) => {
+    setMaxValue(e.target.value);
+
+    const filterPrice = allProducts.filter(
+      (item) => item.discountPrice >= 0 && item.discountPrice <= maxValue,
+    );
+
+    console.log(filterPrice)
+  };
   return (
     <div className="px-2">
       {/* ------------------------- Catagory item ------------------------- */}
@@ -27,12 +53,11 @@ const Sidebar = () => {
           Categoris
         </h2>
         <ul>
-          {allCategories.map((item)=>(
+          {allCategories.map((item) => (
             <li className="mb-2 cursor-pointer text-[18px] font-medium text-gray-800">
-            {item.name}
-          </li>
+              {item.name}
+            </li>
           ))}
-          
         </ul>
       </div>
       {/* ----------------------- Price Range ------------------------- */}
@@ -41,16 +66,17 @@ const Sidebar = () => {
           Price Fillter
         </h2>
         <div className="">
-          <Slider
-            defaultValue={50}
-            className="text-teal-500"
-            barClassName="rounded-none bg-teal-500"
-            thumbClassName="[&::-moz-range-thumb]:rounded-none [&::-webkit-slider-thumb]:rounded-none [&::-moz-range-thumb]:-mt-[4px] [&::-webkit-slider-thumb]:-mt-[4px]"
-            trackClassName="[&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-track]:bg-transparent rounded-none !bg-teal-50 border border-[#2ec946]/20"
+          <label>Value - {maxValue}</label>
+          <input
+            type="range"
+            onChange={handlePriceFilter}
+            min={0}
+            max={500000}
+            defaultValue={500000}
+            className="w-full bg-gray-500"
           />
         </div>
       </div>
-      {/* ----------------------- Paginate ---------------------- */}
     </div>
   );
 };
