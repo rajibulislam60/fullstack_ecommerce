@@ -1,14 +1,37 @@
+import axios from "axios";
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-const Products = ({products}) => {
+const Products = ({ products }) => {
+  const data = useSelector((state) => state.user.value);
+
+  const handleAddtoCart = (item) => {
+    if (!data) {
+      return alert("Please Login Your Account");
+    } else {
+      console.log("click", item);
+      axios.post("http://localhost:5000/api/v1/cart/addtoCart",{
+        user:data._id,
+        products:item._id,
+      }).then((data)=>{
+        console.log(data)
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
+  };
   return (
     <div>
       <div className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-md border border-gray-100 bg-white shadow-md">
         <Link className="relative mx-1 mt-1 flex h-auto overflow-hidden rounded-none lg:h-60">
           <img
             className="object-cover"
-            src={products?products.image:`https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60`}
+            src={
+              products
+                ? products.image
+                : `https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60`
+            }
             alt="product image"
           />
           <span className="absolute left-0 top-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
@@ -18,17 +41,19 @@ const Products = ({products}) => {
         <div className="mt-4 px-5 pb-5">
           <Link>
             <h5 className="text-slate-900 tracking-tight sm:text-[12px] md:text-[14px] lg:text-xl">
-              {products?products.name:`Nike Air MX - Red`}
+              {products ? products.name : `Nike Air MX - Red`}
             </h5>
           </Link>
           <div className="mb-5 mt-2 items-center justify-between">
             <p>
-              <span className="text-slate-900 sm:[14px] md:[16px] font-bold lg:text-2xl mr-1">
-              {products?products.discountPrice:`500`} TK
+              <span className="text-slate-900 sm:[14px] md:[16px] mr-1 font-bold lg:text-2xl">
+                {products ? products.discountPrice : `500`} TK
               </span>
-              <span className="text-slate-900 text-sm line-through">{products?products.sellingPrice:`500`} TK</span>
+              <span className="text-slate-900 text-sm line-through">
+                {products ? products.sellingPrice : `500`} TK
+              </span>
             </p>
-            <div className="flex items-center mt-3">
+            <div className="mt-3 flex items-center">
               <svg
                 aria-hidden="true"
                 className="h-5 w-5 text-yellow-300"
@@ -79,9 +104,9 @@ const Products = ({products}) => {
               </span>
             </div>
           </div>
-          <Link
-            to="/"
-            className="bg-slate-900 flex items-center justify-center rounded-md bg-teal-500 px-3 py-1 text-center text-sm font-medium text-white hover:bg-primary focus:outline-none focus:ring-4 focus:ring-blue-300 lg:px-5 lg:py-2.5"
+          <button
+            onClick={() => handleAddtoCart(products)}
+            className="bg-slate-900 flex w-full items-center justify-center rounded-md bg-teal-500 px-3 py-1 text-center text-sm font-medium text-white hover:bg-primary focus:outline-none focus:ring-4 focus:ring-blue-300 lg:px-5 lg:py-2.5"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +123,7 @@ const Products = ({products}) => {
               />
             </svg>
             Add to cart
-          </Link>
+          </button>
         </div>
       </div>
     </div>

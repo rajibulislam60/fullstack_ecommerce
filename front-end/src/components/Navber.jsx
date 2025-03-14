@@ -21,6 +21,7 @@ import {
   PowerIcon,
   Bars2Icon,
 } from "@heroicons/react/24/solid";
+import { useSelector } from "react-redux";
 import Container from "./Container";
 import { Link } from "react-router-dom";
 import { FcAbout } from "react-icons/fc";
@@ -113,6 +114,7 @@ const navListItems = [
 ];
 
 function NavList() {
+  const data = useSelector((state)=>state.user.value)
   return (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
       {navListItems.map(({ label, icon, href }, key) => (
@@ -132,11 +134,14 @@ function NavList() {
           </Link>
         </Typography>
       ))}
+      {data? <h2>{data.name}</h2>: 
       <Link to="/login">
         <Button size="sm" variant="text">
           <span>Log In</span>
         </Button>
       </Link>
+      }
+      
     </ul>
   );
 }

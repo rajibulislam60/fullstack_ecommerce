@@ -23,8 +23,8 @@ const Login = () => {
         { withCredentials: true },
       )
       .then((data) => {
-        console.log(data)
         dispatch(userLoginInfo(data.data.data))
+        localStorage.setItem("user",JSON.stringify(data.data.data))
           // Cookies.set(
           //   "user",
           //   String(data.data.data.role + data.data.data._id),

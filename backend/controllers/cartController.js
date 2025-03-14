@@ -1,13 +1,12 @@
 const cartModel = require("../model/cartModel");
 
 async function cartController(req, res) {
-  let { user, quantity, price, products } = req.body;
+  let { user, quantity, products } = req.body;
 
   try {
     let cart = new cartModel({
       user,
       quantity,
-      price,
       products,
     });
     await cart.save();
@@ -29,7 +28,7 @@ async function getSingleUserCart(req, res) {
   let { userId } = req.params;
 
   try {
-    let cart = await cartModel.find({ user: userId });
+    let cart = await cartModel.find({ user: userId }).populate("products")
     res.status(200).send({
       success: true,
       msg: "User cart successful",
