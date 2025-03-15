@@ -1,10 +1,27 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const SingleProduct = () => {
-  let {id} = useParams();
+  let { id } = useParams();
+  const [productDetails, setProductDetails] = useState({});
+  const [productImage, setProductImage] = useState([]);
+  const [activeImage, setActiveImage] = useState(0)
 
-  console.log(id)
+  useEffect(() => {
+    const getSingleProduct = () => {
+      axios
+        .get(`http://localhost:5000/api/v1/product/singleProduct/${id}`)
+        .then((response) => {
+          setProductDetails(response.data.data);
+          setProductImage(response.data.data.image || [])
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getSingleProduct();
+  }, [id]);
   return (
     <div>
       <div className="p-4">
@@ -13,30 +30,17 @@ const SingleProduct = () => {
             <div className="top-0 w-full lg:sticky">
               <div className="flex flex-row gap-2">
                 <div className="max-sm:w-14 flex w-16 shrink-0 flex-col gap-2">
-                  <img
-                    src="https://readymadeui.com/images/fashion-img-1.webp"
-                    alt="Product1"
-                    className="aspect-[64/85] w-full cursor-pointer border-b-2 border-black object-cover object-top"
-                  />
-                  <img
-                    src="https://readymadeui.com/images/fashion-img-2.webp"
-                    alt="Product2"
-                    className="aspect-[64/85] w-full cursor-pointer border-b-2 border-transparent object-cover object-top"
-                  />
-                  <img
-                    src="https://readymadeui.com/images/fashion-img-3.webp"
-                    alt="Product3"
-                    className="aspect-[64/85] w-full cursor-pointer border-b-2 border-transparent object-cover object-top"
-                  />
-                  <img
-                    src="https://readymadeui.com/images/fashion-img-4.webp"
-                    alt="Product4"
-                    className="aspect-[64/85] w-full cursor-pointer border-b-2 border-transparent object-cover object-top"
-                  />
+                  {productImage.map((item, index) => (
+                    <img onClick={()=>setActiveImage(index)}
+                      src={item}
+                      alt={productDetails.name}
+                      className="aspect-[64/85] w-full cursor-pointer border-b-2 border-black object-cover object-top"
+                    />
+                  ))}
                 </div>
                 <div className="flex-1">
                   <img
-                    src="https://readymadeui.com/images/fashion-img-1.webp"
+                    src={productImage[activeImage]}
                     alt="Product"
                     className="aspect-[548/712] w-full object-cover"
                   />
@@ -46,24 +50,22 @@ const SingleProduct = () => {
             <div className="w-full">
               <div>
                 <h3 className="text-slate-900 text-lg font-semibold sm:text-xl">
-                  Women Embroidered A-line Kurta
+                  {productDetails.name}
                 </h3>
                 <p className="text-slate-500 mt-2 text-sm">
-                  Women Embroidered Georgette A-line Kurta With Attached Dupatta
-                  (Maroon)
+                  {productDetails.description}
                 </p>
                 <div className="mt-6 flex flex-wrap items-center gap-4">
                   <h4 className="text-slate-900 text-2xl font-semibold sm:text-3xl">
-                    $12
+                    {productDetails.discountPrice} TK
                   </h4>
                   <p className="text-slate-500 text-lg">
-                    <strike>$16</strike>{" "}
-                    <span className="ml-1.5 text-sm">Tax included</span>
+                    <strike>{productDetails.sellingPrice} TK</strike>
                   </p>
                 </div>
                 <div className="mt-4 flex items-center gap-4">
-                  <div className="flex items-center gap-1 rounded-full bg-green-600 px-2.5 text-lg text-white">
-                    <p>4</p>
+                  <div className="flex items-center gap-1 rounded-full bg-teal-600 px-2.5 text-lg text-white">
+                    <p>{productDetails.stock}</p>
                     <svg
                       className="h-[13px] w-[13px] fill-white"
                       viewBox="0 0 14 13"
@@ -112,20 +114,14 @@ const SingleProduct = () => {
                 <div className="mt-6 flex flex-wrap gap-4">
                   <button
                     type="button"
-                    className="border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-900 w-[45%] border px-4 py-3 text-sm font-medium"
-                  >
-                    Add to wishlist
-                  </button>
-                  <button
-                    type="button"
-                    className="w-[45%] border border-blue-600 bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700"
+                    className="w-[45%] border border-teal-600 bg-teal-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700"
                   >
                     Add to cart
                   </button>
                 </div>
               </div>
               <hr className="border-slate-300 my-6" />
-              <div>
+              {/* <div>
                 <h3 className="text-slate-900 text-lg font-semibold sm:text-xl">
                   Select Delivery Location
                 </h3>
@@ -145,7 +141,7 @@ const SingleProduct = () => {
                     Apply
                   </button>
                 </div>
-              </div>
+              </div> */}
               <hr className="border-slate-300 my-6" />
               <div>
                 <h3 className="text-slate-900 text-lg font-semibold sm:text-xl">
@@ -242,7 +238,7 @@ const SingleProduct = () => {
                 </h3>
                 <div className="mt-6 flex items-center gap-1.5">
                   <svg
-                    className="h-5 w-5 fill-blue-600"
+                    className="h-5 w-5 fill-yellow-800"
                     viewBox="0 0 14 13"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -250,7 +246,7 @@ const SingleProduct = () => {
                     <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
                   </svg>
                   <svg
-                    className="h-5 w-5 fill-blue-600"
+                    className="h-5 w-5 fill-yellow-800"
                     viewBox="0 0 14 13"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -258,7 +254,7 @@ const SingleProduct = () => {
                     <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
                   </svg>
                   <svg
-                    className="h-5 w-5 fill-blue-600"
+                    className="h-5 w-5 fill-yellow-800"
                     viewBox="0 0 14 13"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -266,7 +262,7 @@ const SingleProduct = () => {
                     <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
                   </svg>
                   <svg
-                    className="h-5 w-5 fill-blue-600"
+                    className="h-5 w-5 fill-yellow-800"
                     viewBox="0 0 14 13"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -301,7 +297,7 @@ const SingleProduct = () => {
                     </h4>
                     <div className="mt-1 flex space-x-1">
                       <svg
-                        className="h-[14px] w-[14px] fill-blue-600"
+                        className="h-[14px] w-[14px] fill-yellow-800"
                         viewBox="0 0 14 13"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -309,7 +305,7 @@ const SingleProduct = () => {
                         <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
                       </svg>
                       <svg
-                        className="h-[14px] w-[14px] fill-blue-600"
+                        className="h-[14px] w-[14px] fill-yellow-800"
                         viewBox="0 0 14 13"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -317,7 +313,7 @@ const SingleProduct = () => {
                         <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
                       </svg>
                       <svg
-                        className="h-[14px] w-[14px] fill-blue-600"
+                        className="h-[14px] w-[14px] fill-yellow-800"
                         viewBox="0 0 14 13"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -325,7 +321,7 @@ const SingleProduct = () => {
                         <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
                       </svg>
                       <svg
-                        className="h-[14px] w-[14px] fill-blue-600"
+                        className="h-[14px] w-[14px] fill-yellow-800"
                         viewBox="0 0 14 13"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -353,7 +349,7 @@ const SingleProduct = () => {
                 </div>
                 <a
                   href="javascript:void(0)"
-                  className="mt-6 block text-sm font-semibold text-blue-600 hover:underline"
+                  className="mt-6 block text-sm font-semibold fill-teal-600 hover:underline"
                 >
                   Read all reviews
                 </a>

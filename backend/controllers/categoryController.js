@@ -106,7 +106,7 @@ async function singleCategoryController(req, res) {
     let singleCategory = await categoryModel.findOne({ _id: id });
     res.status(200).send({
       success: true,
-      msg: "Single category server error",
+      msg: "Single category successful",
       data: singleCategory,
     });
   } catch (error) {

@@ -82,6 +82,24 @@ async function allProductController(req, res) {
   }
 }
 
+async function singleProductController(req, res) {
+  let { id } = req.params;
+  try {
+    let singleProduct = await productModel.findOne({ _id: id });
+    res.status(200).send({
+      success: true,
+      msg: "Single Product successful",
+      data: singleProduct,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      msg: `${error.message ? error.message : "Single Product server error"}`,
+      error,
+    });
+  }
+}
+
 async function byCategoryProductController(req, res) {
   const { id } = req.params;
   try {
@@ -103,6 +121,7 @@ module.exports = {
   addProductController,
   deleteProductController,
   allProductController,
+  singleProductController,
   byCategoryProductController,
-  featureProductController
+  featureProductController,
 };

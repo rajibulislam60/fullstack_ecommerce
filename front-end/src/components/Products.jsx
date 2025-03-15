@@ -25,7 +25,7 @@ const Products = ({ products }) => {
 
   const handleSingleProduct=(item)=>{
     console.log(item)
-    navigate(`/singleproduct/${item}`)
+    navigate(`/shop/singleproduct/${item}`)
   }
 
   return (
@@ -36,7 +36,7 @@ const Products = ({ products }) => {
             className="object-cover"
             src={
               products
-                ? products.image
+                ? products.image[0]
                 : `https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60`
             }
             alt="product image"
