@@ -11,14 +11,24 @@ let orderSchema = new Schema(
     },
     cartItems: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Cart",
+        productid: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+        },
       },
     ],
     paymentStatus: {
       type: String,
       enum: ["Paid", "Unpaid"],
       default: "Unpaid",
+    },
+    paymentmethod: {
+      type: String,
+      enum: ["COD", "Online"],
     },
     address: {
       type: String,
