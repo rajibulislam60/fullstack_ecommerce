@@ -1,8 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
+  const navigate = useNavigate()
   const [cartList, setCartList]=useState([])
   const data = useSelector((state) => state.user.value);
   useEffect(() => {
@@ -26,6 +28,15 @@ const Cart = () => {
       console.log(err)
     })
   }
+
+  const totalPrice=cartList.reduce(function(total, num){
+    return total + num.products.discountPrice
+  }, 0)
+
+  const handleBackShopping=()=>{
+    navigate("/shop")
+  }
+
   return (
     <div>
       <div className="max-md:max-w-xl mx-auto max-w-5xl p-4">
@@ -122,27 +133,24 @@ const Cart = () => {
           <div className="h-max rounded-md bg-white px-4 py-6 shadow-[0_2px_12px_-3px_rgba(61,63,68,0.3)]">
             <ul className="text-slate-900 space-y-4 font-medium">
               <li className="flex flex-wrap gap-4 text-sm">
-                Subtotal <span className="ml-auto font-semibold">$200.00</span>
+                Subtotal <span className="ml-auto font-semibold">{totalPrice} Tk</span>
               </li>
               <li className="flex flex-wrap gap-4 text-sm">
-                Shipping <span className="ml-auto font-semibold">$2.00</span>
-              </li>
-              <li className="flex flex-wrap gap-4 text-sm">
-                Tax <span className="ml-auto font-semibold">$4.00</span>
+                Delivery Charge <span className="ml-auto font-semibold">100 TK</span>
               </li>
               <hr className="border-slate-300" />
               <li className="flex flex-wrap gap-4 text-sm font-semibold">
-                Total <span className="ml-auto">$206.00</span>
+                Total <span className="ml-auto">{totalPrice + 100} Tk</span>
               </li>
             </ul>
             <div className="mt-8 space-y-2">
               <button
                 type="button"
-                className="bg-slate-800 hover:bg-slate-900 w-full rounded-md px-4 py-2.5 text-sm font-semibold tracking-wide text-white"
+                className="bg-teal-800 hover:bg-slate-900 w-full rounded-md px-4 py-2.5 text-sm font-semibold tracking-wide text-white"
               >
                 Buy Now
               </button>
-              <button
+              <button onClick={handleBackShopping}
                 type="button"
                 className="hover:bg-slate-100 text-slate-900 border-slate-300 w-full rounded-md border bg-transparent px-4 py-2.5 text-sm font-semibold tracking-wide"
               >
