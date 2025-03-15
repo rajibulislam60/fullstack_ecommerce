@@ -12,6 +12,7 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Cart from "./components/Cart";
+import SingleProduct from "./pages/SingleProduct";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
         <Route path="/shop/:categoryId" element={<Shop />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/about" element={<About />} />
+        <Route path="/singleproduct/:id" element={<SingleProduct/>} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />

@@ -1,10 +1,11 @@
 import axios from "axios";
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Products = ({ products }) => {
   const data = useSelector((state) => state.user.value);
+  const navigate = useNavigate();
 
   const handleAddtoCart = (item) => {
     if (!data) {
@@ -21,8 +22,14 @@ const Products = ({ products }) => {
       })
     }
   };
+
+  const handleSingleProduct=(item)=>{
+    console.log(item)
+    navigate(`/singleproduct/${item}`)
+  }
+
   return (
-    <div>
+    <div onClick={()=>handleSingleProduct(products._id)}>
       <div className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-md border border-gray-100 bg-white shadow-md">
         <Link className="relative mx-1 mt-1 flex h-auto overflow-hidden rounded-none lg:h-60">
           <img
