@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Cart = () => {
   const navigate = useNavigate();
   const [cartList, setCartList] = useState([]);
+  const [paymentMethod, setPaymentMethod]=useState("COD")
   const data = useSelector((state) => state.user.value);
   useEffect(() => {
     function getCartData() {
@@ -41,6 +42,22 @@ const Cart = () => {
   const handleBackShopping = () => {
     navigate("/shop");
   };
+
+  const handlePaymentStatus=(e)=>{
+    setPaymentMethod(e.target.value)
+  }
+
+  const handleOrder=()=>{
+    axios.post("http://localhost:5000/api/v1/order/addOrder",{
+      user:data.id,
+      phone:"01760707877",
+      city:"Mirpur",
+      address:"Dhaka, Bangladesh",
+      paymentmethod:"COD",
+      cartItems:cartItems,
+      totalPrice:totalPrice
+    })
+  }
 
   return (
     <div>
@@ -153,10 +170,11 @@ const Cart = () => {
             <div>
               <>
                 <div className="mb-4 flex items-center mt-4">
-                  <input
+                  <input onChange={handlePaymentStatus}
                     id="default-radio-1"
+                    checked={paymentMethod === "COD"}
                     type="radio"
-                    defaultValue=""
+                    defaultValue="COD"
                     name="default-radio"
                     className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
@@ -168,11 +186,11 @@ const Cart = () => {
                   </label>
                 </div>
                 <div className="flex items-center">
-                  <input
-                    defaultChecked=""
+                  <input onChange={handlePaymentStatus}
                     id="default-radio-2"
+                    checked={paymentMethod === "Online"}
                     type="radio"
-                    defaultValue=""
+                    defaultValue="Online"
                     name="default-radio"
                     className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
@@ -186,7 +204,7 @@ const Cart = () => {
               </>
             </div>
             <div className="mt-8 space-y-2">
-              <button
+              <button onClick={handleOrder}
                 type="button"
                 className="hover:bg-slate-900 w-full rounded-md bg-teal-800 px-4 py-2.5 text-sm font-semibold tracking-wide text-white"
               >
