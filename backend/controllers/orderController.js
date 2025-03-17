@@ -20,6 +20,8 @@ async function addOrderController(req, res) {
       address,
       paymentmethod,
       paymentStatus,
+      quantity,
+      productid,
       cartItems,
       totalprice,
       user,
