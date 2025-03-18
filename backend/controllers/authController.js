@@ -81,7 +81,7 @@ async function loginController(req, res) {
           role: existingUser.role,
         };
         const token = jwt.sign({ userInfo }, process.env.jwt_secret, {
-          expiresIn: "1d",
+          expiresIn: "12h",
         });
 
         res.cookie("token", token, {

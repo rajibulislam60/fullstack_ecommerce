@@ -1,4 +1,6 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const CheckOut = () => {
     const [cartList, setCartList] = useState([]);
@@ -42,8 +44,12 @@ const CheckOut = () => {
           console.log(err);
         });
     };
+
+    const SubTotalPrice = cartList.reduce(function (total, num) {
+        return total + num.products.discountPrice;
+      }, 0);
   
-    const TotalPricewithCOD = totalPrice + 100;
+    const TotalPrice = SubTotalPrice + 100;
 
   const handlePaymentStatus = (e) => {
     setPaymentMethod(e.target.value);
@@ -873,29 +879,16 @@ const CheckOut = () => {
                     Subtotal
                   </dt>
                   <dd className="text-base font-medium text-gray-900 dark:text-white">
-                    $8,094.00
+                    {SubTotalPrice} Tk
                   </dd>
                 </dl>
+               
                 <dl className="flex items-center justify-between gap-4 py-3">
                   <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
-                    Savings
-                  </dt>
-                  <dd className="text-base font-medium text-green-500">0</dd>
-                </dl>
-                <dl className="flex items-center justify-between gap-4 py-3">
-                  <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
-                    Store Pickup
+                    Delivery Charge
                   </dt>
                   <dd className="text-base font-medium text-gray-900 dark:text-white">
-                    $99
-                  </dd>
-                </dl>
-                <dl className="flex items-center justify-between gap-4 py-3">
-                  <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
-                    Tax
-                  </dt>
-                  <dd className="text-base font-medium text-gray-900 dark:text-white">
-                    $199
+                    100 Tk
                   </dd>
                 </dl>
                 <dl className="flex items-center justify-between gap-4 py-3">
@@ -903,7 +896,7 @@ const CheckOut = () => {
                     Total
                   </dt>
                   <dd className="text-base font-bold text-gray-900 dark:text-white">
-                    $8,392.00
+                    {TotalPrice} Tk
                   </dd>
                 </dl>
               </div>

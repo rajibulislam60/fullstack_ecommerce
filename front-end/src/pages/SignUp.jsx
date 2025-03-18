@@ -1,121 +1,144 @@
-import { Typography } from "@material-tailwind/react";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router";
+import axios from "axios";
 
-const SignUp = () => {
+const Signup = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  // Handle Input Change
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  // Form Validation
+  const validate = () => {
+    let newErrors = {};
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = "Invalid email format";
+    if (!formData.password) newErrors.password = "Password is required";
+    else if (formData.password.length < 6)
+      newErrors.password = "Password must be at least 6 characters";
+    return newErrors;
+  };
+
+  // Handle Form Submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = validate();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/auth/registration",
+        formData
+      );
+      console.log("Registration Successful:", response.data);
+      alert("Registration successful! Redirecting to login...");
+      navigate("/login"); // Redirect user to login page
+    } catch (error) {
+      console.error("Registration Error:", error);
+      setErrors({ api: error.response?.data?.error || "Something went wrong" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <Typography className="mx-auto ml-2 mr-4 cursor-pointer py-1.5 text-center text-[26px] font-bold text-teal-500 sm:text-[18px] md:text-[22px] lg:text-[26px]">
-            <Link to="/">Exclusive</Link>
-          </Typography>
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-primary">
-            Sign Up to your account
-          </h2>
-        </div>
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+      <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-900">
+          Sign Up
+        </h2>
+        {errors.api && <p className="text-red-500 text-sm text-center mb-4">{errors.api}</p>}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name Field */}
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Enter Your Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className={`w-full rounded-lg border px-4 py-2 outline-none transition-all focus:ring-2 ${
+                errors.name ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              }`}
+              placeholder="Your name..."
+            />
+            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+          </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm/6 font-medium text-gray-900"
-              >
-                Name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  autoComplete="name"
-                  className="block w-full rounded-md border border-black/50 px-3 py-1.5 text-base text-primary outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-600 sm:text-sm/6"
-                />
-              </div>
-            </div>
+          {/* Email Field */}
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className={`w-full rounded-lg border px-4 py-2 outline-none transition-all focus:ring-2 ${
+                errors.email ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              }`}
+              placeholder="your@email.com"
+            />
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+          </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm/6 font-medium text-gray-900"
-              >
-                Email address
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  autoComplete="email"
-                  className="block w-full rounded-md border border-black/50 px-3 py-1.5 text-base text-primary outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-600 sm:text-sm/6"
-                />
-              </div>
-            </div>
+          {/* Password Field */}
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className={`w-full rounded-lg border px-4 py-2 outline-none transition-all focus:ring-2 ${
+                errors.password ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              }`}
+              placeholder="••••••••"
+            />
+            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+          </div>
 
-            <div>
-              <label
-                htmlFor="number"
-                className="block text-sm/6 font-medium text-gray-900"
-              >
-                Phone Number
-              </label>
-              <div className="mt-2">
-                <input
-                  id="number"
-                  name="number"
-                  type="number"
-                  required
-                  autoComplete="number"
-                  className="block w-full rounded-md border border-black/50 px-3 py-1.5 text-base text-primary outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-600 sm:text-sm/6"
-                />
-              </div>
-            </div>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full rounded-lg bg-indigo-600 py-2.5 font-medium text-white transition-colors hover:bg-indigo-700"
+            disabled={loading}
+          >
+            {loading ? "Signing Up..." : "Sign Up"}
+          </button>
+        </form>
 
-            <div>
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm/6 font-medium text-gray-900"
-                >
-                  Password
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  autoComplete="current-password"
-                  className="block w-full rounded-md border border-black/50 px-3 py-1.5 text-base text-primary outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-600 sm:text-sm/6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="shadow-xs flex w-full justify-center rounded-md bg-teal-600 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-teal-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600"
-              >
-                Sign Up
-              </button>
-            </div>
-            <div className="text-sm">
-              <a href="#" className="font-semibold text-primary">
-                Already have a account!{" "}
-                <span className="cursor-pointer text-[16px] text-teal-500 underline hover:text-teal-600">
-                  <Link to="/login">Sign In</Link>
-                </span>
-              </a>
-            </div>
-          </form>
+        {/* Already have an account? */}
+        <div className="mt-6 text-center text-sm text-gray-600">
+          Already have an account?{" "}
+          <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+            Sign In
+          </Link>
         </div>
       </div>
     </div>
   );
 };
 
-export default SignUp;
+export default Signup;
