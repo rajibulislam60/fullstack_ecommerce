@@ -1,12 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const navigate = useNavigate();
   const [cartList, setCartList] = useState([]);
-  const [paymentMethod, setPaymentMethod] = useState("COD");
+  // const [paymentMethod, setPaymentMethod] = useState("COD");
   const data = useSelector((state) => state.user.value);
   useEffect(() => {
     if (!data) {
@@ -46,33 +46,33 @@ const Cart = () => {
     navigate("/shop");
   };
 
-  const handlePaymentStatus = (e) => {
-    setPaymentMethod(e.target.value);
-  };
+  // const handlePaymentStatus = (e) => {
+  //   setPaymentMethod(e.target.value);
+  // };
 
-  const handleOrder = () => {
-    const cartItems = cartList.map((item) => {
-      return {
-        productid: item.products._id,
-      };
-    });
-    axios
-      .post("http://localhost:5000/api/v1/order/addOrder", {
-        user: data._id,
-        phone: "01760707877",
-        city: "Dhaka",
-        address: "Mirpur, Dhaka, Bangladesh",
-        paymentmethod: "COD",
-        cartItems: cartItems,
-        totalprice: TotalPricewithCOD,
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const handleOrder = () => {
+  //   const cartItems = cartList.map((item) => {
+  //     return {
+  //       productid: item.products._id,
+  //     };
+  //   });
+  //   axios
+  //     .post("http://localhost:5000/api/v1/order/addOrder", {
+  //       user: data._id,
+  //       phone: "01760707877",
+  //       city: "Dhaka",
+  //       address: "Mirpur, Dhaka, Bangladesh",
+  //       paymentmethod: "COD",
+  //       cartItems: cartItems,
+  //       totalprice: TotalPricewithCOD,
+  //     })
+  //     .then((data) => {
+  //       console.log(data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const TotalPricewithCOD = totalPrice + 100;
 
@@ -184,7 +184,7 @@ const Cart = () => {
                 Total <span className="ml-auto">{TotalPricewithCOD} Tk</span>
               </li>
             </ul>
-            <div>
+            {/* <div>
               <>
                 <div className="mb-4 mt-4 flex items-center">
                   <input
@@ -221,15 +221,17 @@ const Cart = () => {
                   </label>
                 </div>
               </>
-            </div>
+            </div> */}
             <div className="mt-8 space-y-2">
-              <button
-                onClick={handleOrder}
-                type="button"
-                className="hover:bg-slate-900 w-full rounded-md bg-teal-800 px-4 py-2.5 text-sm font-semibold tracking-wide text-white"
-              >
-                Buy Now
-              </button>
+              <Link to="/checkout">
+                <button
+                  type="button"
+                  className="hover:bg-slate-900 w-full rounded-md bg-teal-800 px-4 py-2.5 text-sm font-semibold tracking-wide text-white"
+                >
+                  CheckOut Now
+                </button>
+              </Link>
+
               <button
                 onClick={handleBackShopping}
                 type="button"
