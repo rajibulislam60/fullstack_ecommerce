@@ -5,8 +5,6 @@ import axios from "axios";
 const AllProducts = () => {
     const [allProducts, setAllProducts] = useState([]);
   
-    
-  
     useEffect(() => {
       fetchProducts();
     }, []);

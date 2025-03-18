@@ -9,6 +9,9 @@ const Cart = () => {
   const [paymentMethod, setPaymentMethod] = useState("COD");
   const data = useSelector((state) => state.user.value);
   useEffect(() => {
+    if (!data) {
+      navigate("/");
+    }
     function getCartData() {
       axios
         .get(`http://localhost:5000/api/v1/cart/sigleUserCart/${data._id}`)
