@@ -50,7 +50,10 @@ const CheckOut = () => {
         cartItems: cartItems,
         totalprice: TotalPrice,
       })
-      .then(() => alert("Order Successful"))
+      .then((response) => {
+        window.location.href = response.data;
+        console.log(response);
+      })
       .catch((err) => console.log(err));
   };
 
