@@ -64,23 +64,23 @@ const CheckOut = () => {
   const TotalPrice = SubTotalPrice + 100;
 
   return (
-    <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
+    <section className="bg-white antialiased dark:bg-gray-900 md:py-16 py-8">
       {loading ? (
         <p className="text-center text-gray-700 dark:text-white">
           Loading cart data...
         </p>
       ) : (
-        <form action="#" className="mx-auto max-w-screen-xl px-4 2xl:px-0">
-          <div className="mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-12 xl:gap-16">
-            <div className="min-w-0 flex-1 space-y-8">
+        <form action="#" className="2xl:px-0 max-w-screen-xl mx-auto px-4">
+          <div className="lg:flex lg:gap-12 lg:items-start mt-6 sm:mt-8 xl:gap-16">
+            <div className="flex-1 min-w-0 space-y-8">
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                <h2 className="text-gray-900 text-xl dark:text-white font-semibold">
                   Delivery Details
                 </h2>
 
                 {/* City Input */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 dark:text-white">
+                  <label className="text-gray-900 text-sm block dark:text-white font-medium">
                     City
                   </label>
                   <input
@@ -88,14 +88,14 @@ const CheckOut = () => {
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="Enter your city"
-                    className="mt-1 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    className="border border-gray-300 p-2.5 rounded-lg text-gray-900 text-sm w-full block dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:border-blue-500 focus:ring-blue-500 mt-1"
                     required
                   />
                 </div>
 
                 {/* Address Input */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 dark:text-white">
+                  <label className="text-gray-900 text-sm block dark:text-white font-medium">
                     Address
                   </label>
                   <input
@@ -103,14 +103,14 @@ const CheckOut = () => {
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     placeholder="Enter your address"
-                    className="mt-1 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    className="border border-gray-300 p-2.5 rounded-lg text-gray-900 text-sm w-full block dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:border-blue-500 focus:ring-blue-500 mt-1"
                     required
                   />
                 </div>
 
                 {/* Phone Number Input */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 dark:text-white">
+                  <label className="text-gray-900 text-sm block dark:text-white font-medium">
                     Phone Number
                   </label>
                   <input
@@ -118,7 +118,7 @@ const CheckOut = () => {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="Enter your phone number"
-                    className="mt-1 block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    className="border border-gray-300 p-2.5 rounded-lg text-gray-900 text-sm w-full block dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:border-blue-500 focus:ring-blue-500 mt-1"
                     required
                   />
                 </div>
@@ -126,11 +126,11 @@ const CheckOut = () => {
 
               {/* Payment Section */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-gray-900 text-xl dark:text-white font-semibold">
                   Payment
                 </h3>
                 <div>
-                  <div className="mb-4 mt-4 flex items-center">
+                  <div className="flex items-center mb-4 mt-4">
                     <input
                       onChange={(e) => setPaymentMethod(e.target.value)}
                       id="cod"
@@ -138,11 +138,11 @@ const CheckOut = () => {
                       type="radio"
                       value="COD"
                       name="payment-method"
-                      className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                      className="bg-gray-100 border-gray-300 h-4 text-blue-600 w-4 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 focus:ring-blue-500"
                     />
                     <label
                       htmlFor="cod"
-                      className="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300"
+                      className="text-gray-900 text-sm dark:text-gray-300 font-semibold ms-2"
                     >
                       Cash On Delivery
                     </label>
@@ -155,11 +155,11 @@ const CheckOut = () => {
                       type="radio"
                       value="Online"
                       name="payment-method"
-                      className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                      className="bg-gray-100 border-gray-300 h-4 text-blue-600 w-4 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 focus:ring-blue-500"
                     />
                     <label
                       htmlFor="online"
-                      className="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300"
+                      className="text-gray-900 text-sm dark:text-gray-300 font-semibold ms-2"
                     >
                       Online Payment
                     </label>
@@ -169,30 +169,30 @@ const CheckOut = () => {
             </div>
 
             {/* Order Summary */}
-            <div className="mt-6 w-full space-y-6 sm:mt-8 lg:mt-0 lg:max-w-xs xl:max-w-md">
+            <div className="w-full lg:max-w-xs lg:mt-0 mt-6 sm:mt-8 space-y-6 xl:max-w-md">
               <div className="flow-root">
-                <div className="-my-3 divide-y divide-gray-200 dark:divide-gray-800">
-                  <dl className="flex items-center justify-between gap-4 py-3">
-                    <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                <div className="-my-3 dark:divide-gray-800 divide-gray-200 divide-y">
+                  <dl className="flex justify-between gap-4 items-center py-3">
+                    <dt className="text-base text-gray-500 dark:text-gray-400 font-normal">
                       Subtotal
                     </dt>
-                    <dd className="text-base font-medium text-gray-900 dark:text-white">
+                    <dd className="text-base text-gray-900 dark:text-white font-medium">
                       {SubTotalPrice} Tk
                     </dd>
                   </dl>
-                  <dl className="flex items-center justify-between gap-4 py-3">
-                    <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                  <dl className="flex justify-between gap-4 items-center py-3">
+                    <dt className="text-base text-gray-500 dark:text-gray-400 font-normal">
                       Delivery Charge
                     </dt>
-                    <dd className="text-base font-medium text-gray-900 dark:text-white">
+                    <dd className="text-base text-gray-900 dark:text-white font-medium">
                       100 Tk
                     </dd>
                   </dl>
-                  <dl className="flex items-center justify-between gap-4 py-3">
-                    <dt className="text-base font-bold text-gray-900 dark:text-white">
+                  <dl className="flex justify-between gap-4 items-center py-3">
+                    <dt className="text-base text-gray-900 dark:text-white font-bold">
                       Total
                     </dt>
-                    <dd className="text-base font-bold text-gray-900 dark:text-white">
+                    <dd className="text-base text-gray-900 dark:text-white font-bold">
                       {TotalPrice} Tk
                     </dd>
                   </dl>
@@ -203,7 +203,7 @@ const CheckOut = () => {
                 <button
                   onClick={handleOrder}
                   type="button"
-                  className="text-semibold flex w-full items-center justify-center rounded-md bg-teal-500 py-3 text-[20px] text-white hover:bg-teal-700"
+                  className="flex bg-teal-500 justify-center rounded-md text-[20px] text-semibold text-white w-full hover:bg-teal-700 items-center py-3"
                 >
                   Order Now
                 </button>
