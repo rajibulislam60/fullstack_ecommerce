@@ -52,7 +52,6 @@ const CheckOut = () => {
       })
       .then((response) => {
         window.location.href = response.data;
-        console.log(response);
       })
       .catch((err) => console.log(err));
   };

@@ -42,7 +42,7 @@ async function addOrderController(req, res) {
       total_amount: 100,
       currency: 'BDT',
       tran_id: 'REF123', // use unique tran_id for each api call
-      success_url: 'http://localhost:3030/success',
+      success_url: 'http://localhost:5000/api/v1/order/success',
       fail_url: 'http://localhost:3030/fail',
       cancel_url: 'http://localhost:3030/cancel',
       ipn_url: 'http://localhost:3030/ipn',
@@ -78,6 +78,11 @@ async function addOrderController(req, res) {
   }
 }
 
+async function paymentSuccessController(req, res){
+  res.redirect("http://localhost:5173/success")
+}
+
 module.exports = {
   addOrderController,
+  paymentSuccessController,
 };
