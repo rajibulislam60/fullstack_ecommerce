@@ -15,6 +15,8 @@ import Cart from "./components/Cart";
 import SingleProduct from "./pages/SingleProduct";
 import CheckOut from "./components/CheckOut";
 import Success from "./components/Success";
+import Fail from "./components/Fail";
+import Cencel from "./components/Cencel";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +32,8 @@ const router = createBrowserRouter(
         <Route path="/checkout" element={<CheckOut />} />
       </Route>
       <Route path="/success" element={<Success />} />
+      <Route path="/fail" element={<Fail />} />
+      <Route path="/cencel" element={<Cencel />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
     </Route>

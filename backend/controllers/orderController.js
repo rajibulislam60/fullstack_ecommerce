@@ -43,9 +43,9 @@ async function addOrderController(req, res) {
       currency: 'BDT',
       tran_id: 'REF123', // use unique tran_id for each api call
       success_url: 'http://localhost:5000/api/v1/order/success',
-      fail_url: 'http://localhost:3030/fail',
-      cancel_url: 'http://localhost:3030/cancel',
-      ipn_url: 'http://localhost:3030/ipn',
+      fail_url: 'http://localhost:5000/api/v1/order/fail',
+      cancel_url: 'http://localhost:5000/api/v1/order/cancel',
+      ipn_url: 'http://localhost:5000/api/v1/order/ipn',
       shipping_method: 'Courier',
       product_name: 'Computer.',
       product_category: 'Electronic',
@@ -82,7 +82,17 @@ async function paymentSuccessController(req, res){
   res.redirect("http://localhost:5173/success")
 }
 
+async function paymentFailController(req, res){
+  res.redirect("http://localhost:5173/fail")
+}
+
+async function paymentCencelController(req, res){
+  res.redirect("http://localhost:5173/cencel")
+}
+
 module.exports = {
   addOrderController,
   paymentSuccessController,
+  paymentFailController,
+  paymentCencelController
 };
