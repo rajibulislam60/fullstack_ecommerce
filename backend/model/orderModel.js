@@ -42,6 +42,9 @@ let orderSchema = new Schema(
       type: Number,
       required: true,
     },
+    trans_id: {
+      type: String,
+    },
   },
   {
     timestamps: true,

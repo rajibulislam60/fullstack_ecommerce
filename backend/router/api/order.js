@@ -9,10 +9,10 @@ const router = express.Router();
 
 router.post("/addOrder", addOrderController);
 
-router.post("/success", paymentSuccessController);
+router.post("/success/:id", paymentSuccessController);
 
-router.post("/fail", paymentFailController);
+router.post("/fail/:id", paymentFailController);
 
-router.post("/cencel", paymentCencelController);
+router.post("/cencel/:id", paymentCencelController);
 
 module.exports = router;
