@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Container from "./Container";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 const Categorys = () => {
   const [allCategories, setAllCategories] = useState([]);
@@ -25,6 +25,12 @@ const Categorys = () => {
       console.error("Error fetching categories:", error);
     }
   };
+
+ 
+
+  const handleCategoryClick=(id)=>{
+    navigate(`/shop/${id}`)
+  }
 
   const LoadingState = () => {
     return (
@@ -53,12 +59,7 @@ const Categorys = () => {
         ))}
       </div>
     );
-  };
-
-  const handleCategoryClick=(categoryId)=>{
-    navigate(`/shop/${categoryId}`)
-  }
-  
+  }; 
   return (
     <section>
       <Container>

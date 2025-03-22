@@ -103,7 +103,7 @@ async function updateCategoryController(req, res) {
 async function singleCategoryController(req, res) {
   let { id } = req.params;
   try {
-    let singleCategory = await categoryModel.findOne({ _id: id });
+    let singleCategory = await categoryModel.findOne({ _id: id }).populate("products");
     res.status(200).send({
       success: true,
       msg: "Single category successful",

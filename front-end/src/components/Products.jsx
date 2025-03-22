@@ -27,7 +27,6 @@ const Products = ({ products }) => {
   };
 
   const handleSingleProduct = (item) => {
-    console.log(item);
     navigate(`/shop/singleproduct/${item}`);
   };
 

@@ -17,6 +17,7 @@ import CheckOut from "./components/CheckOut";
 import Success from "./components/Success";
 import Fail from "./components/Fail";
 import Cencel from "./components/Cencel";
+import SingleCategory from "./pages/SingleCategory";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,7 +26,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<RootLayOut />}>
         <Route index element={<Home />} />
         <Route path="/shop" element={<Shop />} />
-        <Route path="/shop/:categoryId" element={<Shop />} />
+        <Route path="/shop/:id" element={<SingleCategory />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/about" element={<About />} />
         <Route path="/shop/singleproduct/:id" element={<SingleProduct/>} />
