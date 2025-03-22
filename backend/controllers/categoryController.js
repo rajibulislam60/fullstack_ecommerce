@@ -5,14 +5,27 @@ const fs = require("fs");
 async function CreateCategoryController(req, res) {
   let { name, description } = req.body;
 
-  let category = new categoryModel({
-    name,
-    description,
-    image: process.env.HOST_URL + req.file.filename,
-  });
+  if (!req.file) {
+    return res.status(400).send({ success: false, msg: "Image file is required" });
+  }
 
-  await category.save();
-  return res.status(201).send({ success: true, msg: "Category is created" });
+  try {
+    let category = new categoryModel({
+      name,
+      description,
+      image: process.env.HOST_URL + req.file.filename, // Use the filename of the uploaded image
+    });
+
+    await category.save();
+    res.status(201).send({ success: true, msg: "Category created successfully" });
+  } catch (err) {
+    console.error("Error creating category:", err);
+    res.status(500).send({
+      success: false,
+      msg: "Internal server error",
+      error: err.message,
+    });
+  }
 }
 
 async function deleteCategoryController(req, res) {
@@ -103,10 +116,12 @@ async function updateCategoryController(req, res) {
 async function singleCategoryController(req, res) {
   let { id } = req.params;
   try {
-    let singleCategory = await categoryModel.findOne({ _id: id }).populate("products");
+    let singleCategory = await categoryModel
+      .findOne({ _id: id })
+      .populate("products");
     res.status(200).send({
       success: true,
-      msg: "Single category successful",
+      msg: "Category fetched successfully",
       data: singleCategory,
     });
   } catch (error) {

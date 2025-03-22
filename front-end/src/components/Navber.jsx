@@ -31,10 +31,12 @@ const profileMenuItems = [
   {
     label: "My Profile",
     icon: UserCircleIcon,
+    href: "/profile"
   },
   {
     label: "Sign Out",
     icon: PowerIcon,
+    href: "/logout",
   },
 ];
 
@@ -67,9 +69,10 @@ function ProfileMenu() {
         </Button>
       </MenuHandler>
       <MenuList className="p-1">
-        {profileMenuItems.map(({ label, icon }, key) => {
+        {profileMenuItems.map(({ label, icon, href }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
           return (
+            <Link to={href}>
             <MenuItem
               key={label}
               onClick={closeMenu}
@@ -92,6 +95,8 @@ function ProfileMenu() {
                 {label}
               </Typography>
             </MenuItem>
+            </Link>
+            
           );
         })}
       </MenuList>

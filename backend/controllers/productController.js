@@ -4,8 +4,15 @@ const fs = require("fs");
 
 const addProductController = async (req, res) => {
   try {
-    const { name, description, sellingPrice, discountPrice, stock, category, isFeature } =
-      req.body;
+    const {
+      name,
+      description,
+      sellingPrice,
+      discountPrice,
+      stock,
+      category,
+      isFeature,
+    } = req.body;
 
     if (!name || !description || !sellingPrice || !stock || !category) {
       return res
@@ -110,12 +117,11 @@ async function byCategoryProductController(req, res) {
   }
 }
 
-async function featureProductController(req, res){
-  const product = await productModel.find({isFeature:true})
+async function featureProductController(req, res) {
+  const product = await productModel.find({ isFeature: true });
 
-  res.send(product)
+  res.send(product);
 }
-
 
 module.exports = {
   addProductController,

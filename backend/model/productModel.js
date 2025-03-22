@@ -13,12 +13,11 @@ let productSchema = new Schema(
       type: Array,
       required: true,
     },
-    category: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Category",
-      },
-    ],
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+    },
+
     stock: {
       type: Number,
     },
@@ -39,9 +38,9 @@ let productSchema = new Schema(
     discountPrice: {
       type: Number,
     },
-    isFeature:{
+    isFeature: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
   {
