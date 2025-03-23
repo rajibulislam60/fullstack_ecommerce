@@ -1,4 +1,5 @@
 const productModel = require("../model/productModel");
+const categoryModel = require("../model/categoryModel")
 const path = require("path");
 const fs = require("fs");
 
@@ -8,20 +9,17 @@ const addProductController = async (req, res) => {
       name,
       description,
       sellingPrice,
-      discountPrice,
+      discountPrice = 0, // Default value
       stock,
       category,
-      isFeature,
+      isFeature = false, // Default value
     } = req.body;
 
     if (!name || !description || !sellingPrice || !stock || !category) {
-      return res
-        .status(400)
-        .json({ success: false, msg: "All fields are required" });
+      return res.status(400).json({ success: false, msg: "All fields are required" });
     }
 
-    const images =
-      req.files?.map((item) => process.env.HOST_URL + item.filename) || [];
+    const images = req.files?.map((item) => process.env.HOST_URL + item.filename) || [];
 
     const product = new productModel({
       name,
@@ -35,11 +33,25 @@ const addProductController = async (req, res) => {
     });
 
     await product.save();
-    return res
-      .status(201)
-      .json({ success: true, msg: "Product created successfully", product });
+
+    const updateCategory = await categoryModel.findOneAndUpdate(
+      { _id: category },
+      { $push: { products: product._id } },
+      { new: true }
+    );
+
+    if (!updateCategory) {
+      return res.status(404).json({ success: false, msg: "Category not found" });
+    }
+
+    return res.status(201).json({
+      success: true,
+      msg: "Product created successfully",
+      product,
+    });
   } catch (err) {
     console.error("Error adding product:", err);
+
     return res.status(500).json({
       success: false,
       msg: "Internal Server Error",
@@ -47,6 +59,7 @@ const addProductController = async (req, res) => {
     });
   }
 };
+
 
 async function deleteProductController(req, res) {
   let { id } = req.params;

@@ -13,7 +13,7 @@ async function CreateCategoryController(req, res) {
     let category = new categoryModel({
       name,
       description,
-      image: process.env.HOST_URL + req.file.filename, // Use the filename of the uploaded image
+      image: process.env.HOST_URL + req.file.filename,
     });
 
     await category.save();
