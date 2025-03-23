@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Sidebar = ({ maxPrice, setMaxPrice, allProducts, setFilteredProducts }) => {
+const Sidebar = ({
+  maxPrice,
+  setMaxPrice,
+  allProducts,
+  setFilteredProducts,
+}) => {
   const [allCategories, setAllCategories] = useState([]);
-useEffect(()=>{
-  fetchCategories()
-}, [])
+  const [activeCategory, setActiveCategory] = useState(null);
+  useEffect(() => {
+    fetchCategories();
+  }, []);
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
@@ -21,10 +27,20 @@ useEffect(()=>{
     const value = Number(e.target.value);
     setMaxPrice(value);
     const filtered = allProducts.filter(
-      (item) => item.discountPrice !== undefined && item.discountPrice >= 0 && item.discountPrice <= value
+      (item) =>
+        item.discountPrice !== undefined &&
+        item.discountPrice >= 0 &&
+        item.discountPrice <= value,
     );
 
     setFilteredProducts(filtered);
+  };
+
+  const handleCategoryFilter = (categoryId) => {
+    const filtered = allProducts.filter((item) => item.category === categoryId);
+    setFilteredProducts(filtered);
+    setActiveCategory(categoryId);
+    handleCategoryFilter(categoryId);
   };
 
   return (
@@ -36,7 +52,16 @@ useEffect(()=>{
         </h2>
         <ul>
           {allCategories.map((item) => (
-            <li className="mb-2 cursor-pointer text-[18px] font-medium text-gray-800">
+            <li
+              onClick={() => {
+                handleCategoryFilter(item._id);
+              }}
+              className={`mb-2 cursor-pointer text-[18px] font-medium transition-colors ${
+                activeCategory === item._id
+                  ? "text-teal-500 font-semibold"
+                  : "text-gray-800 hover:text-teal-500"
+              }`}
+            >
               {item.name}
             </li>
           ))}
