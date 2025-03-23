@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import Paginate from '../components/Paginate';
+import Container from '../components/Container';
 
 const SingleCategory = () => {
   let { id } = useParams();
@@ -28,7 +29,11 @@ const SingleCategory = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>
+      <Container>
+        <h4 className='mt-6'>Loading...</h4>
+      </Container>
+    </div>;
   }
   
   if (error) {
@@ -37,6 +42,8 @@ const SingleCategory = () => {
 
   return (
     <div>
+      <Container>
+      <div>
       {categoryInfo ? (
         <div>
           <h1>{categoryInfo.name}</h1>
@@ -60,6 +67,8 @@ const SingleCategory = () => {
       {categoryInfo?.products && (
         <Paginate allProducts={categoryInfo.products} itemsPerPage={8} />
       )}
+    </div>
+      </Container>
     </div>
   );
 };
