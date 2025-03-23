@@ -34,9 +34,9 @@ const Products = ({ products }) => {
     <div className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-md border border-gray-100 bg-white shadow-md">
       <div onClick={() => handleSingleProduct(products._id)}>
         <div className="relative flex w-full max-w-xs flex-col ">
-          <Link className="relative mx-1 mt-1 flex h-auto overflow-hidden rounded-none lg:h-60">
+          <Link className="relative w-full mx-1 mt-1 flex overflow-hidden rounded-none h-30 lg:h-60">
             <img
-              className="object-cover"
+              className="object-cover w-full"
               src={
                 products
                   ? products.image[0]

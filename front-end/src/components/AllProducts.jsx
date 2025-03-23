@@ -1,27 +1,11 @@
-import React, { useEffect, useState } from "react";
-import Paginate from "./Paginate";
-import axios from "axios";
+import React from "react";
+import Paginate from "./Paginate"; // Assuming you have a Paginate component
 
-const AllProducts = () => {
-    const [allProducts, setAllProducts] = useState([]);
-  
-    useEffect(() => {
-      fetchProducts();
-    }, []);
-  
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/v1/product/allproduct",
-        );
-        setAllProducts(response.data.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
+const AllProducts = ({ filteredProducts }) => {
   return (
-    <div className="">
-      <Paginate allProducts={allProducts} itemsPerPage={8} />
+    <div className="p-4">
+      <h2 className="text-2xl font-bold text-teal-500 mb-4">All Products</h2>
+      <Paginate allProducts={filteredProducts} itemsPerPage={12} />
     </div>
   );
 };

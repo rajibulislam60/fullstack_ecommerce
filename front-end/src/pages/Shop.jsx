@@ -4,9 +4,28 @@ import Sidebar from "../components/Sidebar";
 import AllProducts from "../components/AllProducts";
 import { FaFilter } from "react-icons/fa";
 import { GrExpand } from "react-icons/gr";
+import axios from "axios";
 
 const Shop = () => {
   let [fillterModel, setFillterModel] = useState(true);
+  const [allProducts, setAllProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [maxPrice, setMaxPrice] = useState(50000);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/v1/product/allproduct",
+        );
+        setAllProducts(response.data.data);
+        setFilteredProducts(response.data.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     function ResizeScreen() {
@@ -33,12 +52,17 @@ const Shop = () => {
                 onClick={() => setFillterModel(false)}
                 className="mx-auto mb-3 mr-2 mt-3 cursor-pointer select-none text-xl text-red-500 lg:hidden"
               />
-              <Sidebar />
+              <Sidebar
+                maxPrice={maxPrice}
+                setMaxPrice={setMaxPrice}
+                allProducts={allProducts}
+                setFilteredProducts={setFilteredProducts}
+              />
             </div>
           )}
 
           <div className="col-span-12 lg:col-span-9">
-            <AllProducts />
+            <AllProducts filteredProducts={filteredProducts} />
           </div>
         </div>
       </Container>

@@ -1,30 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Sidebar = () => {
+const Sidebar = ({ maxPrice, setMaxPrice, allProducts, setFilteredProducts }) => {
   const [allCategories, setAllCategories] = useState([]);
-  const [allProducts, setAllProducts] = useState([]);
-  const [maxValue, setMaxValue] = useState(500000);
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/v1/product/allproduct",
-      );
-      setAllProducts(response.data.data);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
+useEffect(()=>{
+  fetchCategories()
+}, [])
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
@@ -37,14 +18,15 @@ const Sidebar = () => {
   };
 
   const handlePriceFilter = (e) => {
-    setMaxValue(e.target.value);
-
-    const filterPrice = allProducts.filter(
-      (item) => item.discountPrice >= 0 && item.discountPrice <= maxValue,
+    const value = Number(e.target.value);
+    setMaxPrice(value);
+    const filtered = allProducts.filter(
+      (item) => item.discountPrice !== undefined && item.discountPrice >= 0 && item.discountPrice <= value
     );
 
-    console.log(filterPrice)
+    setFilteredProducts(filtered);
   };
+
   return (
     <div className="px-2">
       {/* ------------------------- Catagory item ------------------------- */}
@@ -66,7 +48,7 @@ const Sidebar = () => {
           Price Fillter
         </h2>
         <div className="">
-          <label>Value - {maxValue}</label>
+          <label>Value - {maxPrice}</label>
           <input
             type="range"
             onChange={handlePriceFilter}
