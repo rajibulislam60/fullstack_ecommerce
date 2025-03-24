@@ -1,7 +1,8 @@
 const productModel = require("../model/productModel");
-const categoryModel = require("../model/categoryModel")
+const categoryModel = require("../model/categoryModel");
 const path = require("path");
 const fs = require("fs");
+const mongoose = require("mongoose");
 
 const addProductController = async (req, res) => {
   try {
@@ -16,10 +17,13 @@ const addProductController = async (req, res) => {
     } = req.body;
 
     if (!name || !description || !sellingPrice || !stock || !category) {
-      return res.status(400).json({ success: false, msg: "All fields are required" });
+      return res
+        .status(400)
+        .json({ success: false, msg: "All fields are required" });
     }
 
-    const images = req.files?.map((item) => process.env.HOST_URL + item.filename) || [];
+    const images =
+      req.files?.map((item) => process.env.HOST_URL + item.filename) || [];
 
     const product = new productModel({
       name,
@@ -41,7 +45,9 @@ const addProductController = async (req, res) => {
     );
 
     if (!updateCategory) {
-      return res.status(404).json({ success: false, msg: "Category not found" });
+      return res
+        .status(404)
+        .json({ success: false, msg: "Category not found" });
     }
 
     return res.status(201).json({
@@ -59,7 +65,6 @@ const addProductController = async (req, res) => {
     });
   }
 };
-
 
 async function deleteProductController(req, res) {
   let { id } = req.params;
@@ -130,11 +135,41 @@ async function byCategoryProductController(req, res) {
   }
 }
 
-async function featureProductController(req, res) {
+async function allFeatureProductController(req, res) {
   const product = await productModel.find({ isFeature: true });
 
   res.send(product);
 }
+
+async function featureProductController(req, res) {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ success: false, msg: "Invalid product ID" });
+  }
+
+  try {
+    const product = await productModel.findById(id);
+    if (!product) {
+      return res.status(404).json({ success: false, msg: "Product not found" });
+    }
+
+    const updatedProduct = await productModel.findByIdAndUpdate(
+      new mongoose.Types.ObjectId(id), // Convert to ObjectId
+      { isFeature: !product.isFeature },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      success: true,
+      msg: `Product ${updatedProduct.isFeature ? "marked as Featured" : "removed from Featured"} successfully`,
+      data: updatedProduct,
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, msg: err.message || "Internal Server Error" });
+  }
+}
+
+
 
 module.exports = {
   addProductController,
@@ -142,5 +177,6 @@ module.exports = {
   allProductController,
   singleProductController,
   byCategoryProductController,
+  allFeatureProductController,
   featureProductController,
 };

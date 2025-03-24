@@ -9,6 +9,7 @@ import AllProduct from "./pages/AllProduct";
 import AddCategory from "./pages/AddCategory";
 import AllCategory from "./pages/AllCategory";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
+import Feature from "./pages/Feature";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="/allCategory" element={<AllCategory />} />
             <Route path="/addProduct" element={<AddProduct />} />
             <Route path="/allProduct" element={<AllProduct />} />
+            <Route path="/feature" element={<Feature />} />
           </Route>
         </Route>
         <Route path="/login" element={<Login />} />
