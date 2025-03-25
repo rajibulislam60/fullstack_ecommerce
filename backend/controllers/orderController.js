@@ -128,9 +128,40 @@ async function paymentCencelController(req, res) {
     });
 }
 
+const totalSalesController = async (req, res) => {
+  try {
+    const totalSales = await orderModel.countDocuments({ paymentStatus: 'Paid' });
+    res.status(200).json({
+      success: true,
+      totalSales,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, msg: err.message || err });
+  }
+};
+
+const totalRevenueController = async (req, res) => {
+  try {
+    const totalRevenue = await orderModel.aggregate([
+      { $match: { paymentStatus: 'Paid' } },
+      { $group: { _id: null, total: { $sum: "$totalAmount" } } }
+    ]);
+    res.status(200).json({
+      success: true,
+      totalRevenue: totalRevenue[0]?.total || 0,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, msg: err.message || err });
+  }
+};
+
+
+
 module.exports = {
   addOrderController,
   paymentSuccessController,
   paymentFailController,
   paymentCencelController,
+  totalSalesController,
+  totalRevenueController,
 };

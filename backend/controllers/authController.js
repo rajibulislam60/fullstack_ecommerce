@@ -161,9 +161,19 @@ async function ResendOtpController(req, res) {
   }
 }
 
+const totalUsersController = async (req, res) => {
+  try {
+    const totalUsers = await userModel.countDocuments();
+    res.status(200).json({ success: true, totalUsers });
+  } catch (err) {
+    res.status(500).json({ success: false, msg: err.message || err });
+  }
+};
+
 module.exports = {
   registrationController,
   loginController,
   OtpVerifyController,
   ResendOtpController,
+  totalUsersController,
 };

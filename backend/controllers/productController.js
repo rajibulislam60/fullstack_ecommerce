@@ -170,6 +170,43 @@ async function allFeatureProductController(req, res) {
   res.send(product);
 }
 
+const totalProductsController = async (req, res) => {
+  try {
+    const totalProducts = await productModel.countDocuments();
+    res.status(200).json({
+      success: true,
+      totalProducts,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, msg: err.message || err });
+  }
+};
+
+const bestSellingProductsController = async (req, res) => {
+  try {
+    const bestSelling = await productModel.aggregate([
+      { $lookup: {
+          from: "orders", 
+          localField: "_id", 
+          foreignField: "products.productId", 
+          as: "orderDetails"
+      }},
+      { $unwind: "$orderDetails" },
+      { $group: { _id: "$name", sales: { $sum: "$orderDetails.quantity" } } },
+      { $sort: { sales: -1 } },
+      { $limit: 5 }
+    ]);
+    res.status(200).json({
+      success: true,
+      bestSelling,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, msg: err.message || err });
+  }
+};
+
+
+
 
 
 module.exports = {
@@ -180,4 +217,6 @@ module.exports = {
   byCategoryProductController,
   allFeatureProductController,
   featureProductController,
+  totalProductsController,
+  bestSellingProductsController,
 };
