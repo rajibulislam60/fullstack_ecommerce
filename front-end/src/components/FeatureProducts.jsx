@@ -9,10 +9,12 @@ const FeatureProducts = () => {
   useEffect(() => {
     const fetchAllFeaturedProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/v1/product/isfeature");
-        
+        const response = await axios.get(
+          "http://localhost:5000/api/v1/product/isfeature",
+        );
+
         console.log("Featured Products:", response);
-        
+
         setFeatureProducts(response.data.data || response.data);
       } catch (error) {
         console.error("Error fetching featured products:", error);
@@ -31,9 +33,11 @@ const FeatureProducts = () => {
           </h2>
           <div className="grid grid-cols-2 gap-4 px-1 md:grid-cols-3 lg:grid-cols-4">
             {featureProducts.length > 0 ? (
-              featureProducts.map((products) => (
-                <Products key={products._id} products={products} />
-              ))
+              featureProducts
+                .slice(0, 12)
+                .map((products) => (
+                  <Products key={products._id} products={products} />
+                ))
             ) : (
               <p className="text-gray-500">No featured products available.</p>
             )}
