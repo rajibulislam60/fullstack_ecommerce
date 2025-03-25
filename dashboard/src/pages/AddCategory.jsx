@@ -51,7 +51,7 @@ const AddCategory = () => {
       });
 
       console.log(response.data);
-      setFormdata({ name: "", description: "" });
+      setFormdata({ name: "", description: "" }); // Clear form
       setImage(null);
     } catch (error) {
       console.error(error);
