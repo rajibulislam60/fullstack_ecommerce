@@ -43,27 +43,7 @@ const SingleCategory = () => {
   return (
     <div>
       <Container>
-      <div>
-      {categoryInfo ? (
-        <div>
-          <h1>{categoryInfo.name}</h1>
-          <p>{categoryInfo.description}</p>
-          <div>
-            <h2>Products:</h2>
-            {categoryInfo.products && categoryInfo.products.length > 0 ? (
-              <ul>
-                {categoryInfo.products.map((product) => (
-                  <li key={product._id}>{product.name}</li>
-                ))}
-              </ul>
-            ) : (
-              <p>No products available for this category.</p>
-            )}
-          </div>
-        </div>
-      ) : (
-        <div>No category data available</div>
-      )}
+      <div className='mt-8'>
       {categoryInfo?.products && (
         <Paginate allProducts={categoryInfo.products} itemsPerPage={8} />
       )}
