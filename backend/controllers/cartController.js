@@ -28,7 +28,7 @@ async function getSingleUserCart(req, res) {
   let { userId } = req.params;
 
   try {
-    let cart = await cartModel.find({ user: userId }).populate("products")
+    const cart = await cartModel.find({ user: userId }).populate("products");
     res.status(200).send({
       success: true,
       msg: "User cart successful",
@@ -71,7 +71,7 @@ async function cartproductDecrement(req, res) {
   let { id } = req.params;
 
   try {
-    const cart = await cartModel.findOneAndUpdate({ _id: id });
+    const cart = await cartModel.findOneAndUpdate({ _id: id }).populate("products");
     if (cart.quantity > 1) {
       cart.quantity--;
     }

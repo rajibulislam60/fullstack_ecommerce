@@ -27,6 +27,7 @@ const SingleProduct = () => {
   }, [id]);
 
   const handleAddtoCart = (item) => {
+    console.log(item)
     if (!data) {
       return alert("Please Login Your Account");
     } else {

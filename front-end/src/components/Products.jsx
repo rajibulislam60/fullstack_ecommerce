@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 
-const Products = ({ products }) => {
+const Products = ({ products}) => {
   const data = useSelector((state) => state.user.value);
   const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ const Products = ({ products }) => {
           user: data._id,
           products: item._id,
         })
-        .then((data) => {
+        .then(() => {
           toast.success("Add Cart Success", {
             position: "top-center",
             autoClose: 1000,
@@ -43,34 +43,36 @@ const Products = ({ products }) => {
   return (
     <div className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-md border border-gray-100 bg-white shadow-md">
       <div onClick={() => handleSingleProduct(products._id)}>
-        <div className="relative flex w-full max-w-xs flex-col ">
-          <Link className="relative w-full mx-1 mt-1 flex overflow-hidden rounded-none h-30 lg:h-60">
+        <div className="relative flex w-full max-w-xs flex-col">
+          <Link className="h-30 relative mx-1 mt-1 flex w-full overflow-hidden rounded-none lg:h-60">
             <img
-              className="object-cover w-full"
-              src={
-                products
-                  ? products.image[0]
-                  : `https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60`
-              }
+              className="w-full object-cover"
+              src={products.image[0]}
               alt="product image"
             />
             <span className="absolute left-0 top-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
-              39% OFF
+              {/* {Math.round(
+                ((products?.sellingPrice - products?.discountPrice) /
+                  products?.sellingPrice) *
+                  100,
+              )} */}
+              
+              % OFF
             </span>
           </Link>
           <div className="mt-4 px-5">
             <Link>
-              <h5 className="text-slate-900 h-[30px] lg:h-[50px] tracking-tight sm:text-[12px] md:text-[14px] lg:text-xl">
-                {products ? products.name : `Nike Air MX - Red`}
+              <h5 className="text-slate-900 h-[30px] tracking-tight sm:text-[12px] md:text-[14px] lg:h-[50px] lg:text-xl">
+                {products.name}
               </h5>
             </Link>
             <div className="mb-5 mt-2 items-center justify-between">
               <p>
                 <span className="text-slate-900 sm:[14px] md:[16px] mr-1 font-bold lg:text-xl">
-                  {products ? products.discountPrice : `500`} TK
+                  {products.discountPrice} TK
                 </span>
                 <span className="text-slate-900 text-sm line-through">
-                  {products ? products.sellingPrice : `500`} TK
+                  {products.sellingPrice} TK
                 </span>
               </p>
               <div className="mt-3 flex items-center">
@@ -129,7 +131,7 @@ const Products = ({ products }) => {
       </div>
       <button
         onClick={() => handleAddtoCart(products)}
-        className="bg-slate-900 flex w-full items-center justify-center border border-teal-500  bg-teal-500 px-3 py-1 text-center text-sm font-medium text-white hover:bg-primary hover:border-primary focus:outline-none focus:ring-4 focus:ring-blue-300 lg:px-5 lg:py-2.5"
+        className="bg-slate-900 flex w-full items-center justify-center border border-teal-500 bg-teal-500 px-3 py-1 text-center text-sm font-medium text-white hover:border-primary hover:bg-primary focus:outline-none focus:ring-4 focus:ring-blue-300 lg:px-5 lg:py-2.5"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

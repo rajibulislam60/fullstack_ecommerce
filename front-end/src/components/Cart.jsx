@@ -1,17 +1,20 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 
 const Cart = () => {
   const navigate = useNavigate();
   const [cartList, setCartList] = useState([]);
   const data = useSelector((state) => state.user.value);
+
   useEffect(() => {
     if (!data) {
       navigate("/");
+      return;
     }
+
     function getCartData() {
       axios
         .get(`http://localhost:5000/api/v1/cart/sigleUserCart/${data._id}`)
@@ -19,19 +22,20 @@ const Cart = () => {
           setCartList(response.data.data);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     }
+
     getCartData();
-  }, []);
+  }, [data, navigate]);
 
   const handleRemoveCartProduct = (item) => {
     axios
-      .delete(
-        `http://localhost:5000/api/v1/cart/cartproductDeleted/${item._id}`,
-      )
+      .delete(`http://localhost:5000/api/v1/cart/cartproductDeleted/${item._id}`)
       .then(() => {
-        setCartList((prevCartList) => prevCartList.filter((cartItem) => cartItem._id !== item._id));
+        setCartList((prevCartList) =>
+          prevCartList.filter((cartItem) => cartItem._id !== item._id)
+        );
         toast.success("Product Deleted", {
           position: "top-center",
           autoClose: 1000,
@@ -39,24 +43,59 @@ const Cart = () => {
           closeOnClick: false,
           pauseOnHover: true,
           draggable: true,
-          progress: undefined,
           theme: "light",
           transition: Bounce,
         });
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
 
-  const totalPrice = cartList.reduce(function (total, num) {
-    return total + num.products.discountPrice;
-  }, 0);
+  // const handleIncrement = (item) => {
+  //   console.log(item)
+  //   axios
+  //     .patch(`http://localhost:5000/api/v1/cart/productIncrement/${item._id}`)
+  //     .then((response) => {
+  //       console.log(response)
+  //       // setCartList((prevList) =>
+  //       //   prevList.map((cartItem) =>
+  //       //     cartItem._id === item._id
+  //       //       ? { ...cartItem, quantity: cartItem.quantity + 1 }
+  //       //       : cartItem
+  //       //   )
+  //       // );
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // };
+
+  // const handleDecrement = (item) => {
+  //   axios
+  //     .patch(`http://localhost:5000/api/v1/cart/productDecrement/${item._id}`)
+  //     .then(() => {
+  //       setCartList((prevList) =>
+  //         prevList.map((cartItem) =>
+  //           cartItem._id === item._id && cartItem.quantity > 1
+  //             ? { ...cartItem, quantity: cartItem.quantity - 1 }
+  //             : cartItem
+  //         )
+  //       );
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // };
+
+  const totalPrice = cartList.reduce(
+    (total, item) => total + item.products.discountPrice * item.quantity,
+    0
+  );
 
   const handleBackShopping = () => {
     navigate("/shop");
   };
-
 
   const TotalPricewithCOD = totalPrice + 100;
 
@@ -67,12 +106,16 @@ const Cart = () => {
         <div className="mt-8 grid gap-10 md:grid-cols-3">
           <div className="space-y-4 md:col-span-2">
             {cartList?.map((item) => (
-              <div className="flex gap-4 rounded-md bg-white px-4 py-6 shadow-[0_2px_12px_-3px_rgba(61,63,68,0.3)]">
+              <div
+                key={item._id}
+                className="flex gap-4 rounded-md bg-white px-4 py-6 shadow-[0_2px_12px_-3px_rgba(61,63,68,0.3)]"
+              >
                 <div className="flex gap-4">
                   <div className="max-sm:w-24 max-sm:h-24 h-28 w-28 shrink-0">
                     <img
                       src={item.products.image[0]}
                       className="h-full w-full object-contain"
+                      alt={item.products.name}
                     />
                   </div>
                   <div className="flex flex-col gap-4">
@@ -83,6 +126,7 @@ const Cart = () => {
                     </div>
                     <div className="mt-auto flex items-center gap-3">
                       <button
+                        onClick={() => handleIncrement(item)}
                         type="button"
                         className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-400 outline-none"
                       >
@@ -91,16 +135,14 @@ const Cart = () => {
                           className="w-2 fill-white"
                           viewBox="0 0 124 124"
                         >
-                          <path
-                            d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
-                            data-original="#000000"
-                          />
+                          <path d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z" />
                         </svg>
                       </button>
                       <span className="text-sm font-semibold leading-[18px]">
                         {item.quantity}
                       </span>
                       <button
+                        onClick={() => handleDecrement(item)}
                         type="button"
                         className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-800 outline-none"
                       >
@@ -109,10 +151,7 @@ const Cart = () => {
                           className="w-2 fill-white"
                           viewBox="0 0 42 42"
                         >
-                          <path
-                            d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
-                            data-original="#000000"
-                          />
+                          <path d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z" />
                         </svg>
                       </button>
                     </div>
@@ -125,10 +164,7 @@ const Cart = () => {
                       className="fill-slate-400 inline-block h-4 w-4 cursor-pointer hover:fill-pink-600"
                       viewBox="0 0 64 64"
                     >
-                      <path
-                        d="M45.5 4A18.53 18.53 0 0 0 32 9.86 18.5 18.5 0 0 0 0 22.5C0 40.92 29.71 59 31 59.71a2 2 0 0 0 2.06 0C34.29 59 64 40.92 64 22.5A18.52 18.52 0 0 0 45.5 4ZM32 55.64C26.83 52.34 4 36.92 4 22.5a14.5 14.5 0 0 1 26.36-8.33 2 2 0 0 0 3.27 0A14.5 14.5 0 0 1 60 22.5c0 14.41-22.83 29.83-28 33.14Z"
-                        data-original="#000000"
-                      />
+                      <path d="M45.5 4A18.53 18.53 0 0 0 32 9.86 18.5 18.5 0 0 0 0 22.5C0 40.92 29.71 59 31 59.71a2 2 0 0 0 2.06 0C34.29 59 64 40.92 64 22.5A18.52 18.52 0 0 0 45.5 4ZM32 55.64C26.83 52.34 4 36.92 4 22.5a14.5 14.5 0 0 1 26.36-8.33 2 2 0 0 0 3.27 0A14.5 14.5 0 0 1 60 22.5c0 14.41-22.83 29.83-28 33.14Z" />
                     </svg>
                     <svg
                       onClick={() => handleRemoveCartProduct(item)}
@@ -136,14 +172,7 @@ const Cart = () => {
                       className="fill-slate-400 inline-block h-4 w-4 cursor-pointer hover:fill-red-600"
                       viewBox="0 0 24 24"
                     >
-                      <path
-                        d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z"
-                        data-original="#000000"
-                      />
-                      <path
-                        d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z"
-                        data-original="#000000"
-                      />
+                      <path d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z" />
                     </svg>
                   </div>
                   <h3 className="text-slate-900 mt-auto text-sm font-semibold sm:text-base">

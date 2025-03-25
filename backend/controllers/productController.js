@@ -135,11 +135,6 @@ async function byCategoryProductController(req, res) {
   }
 }
 
-async function allFeatureProductController(req, res) {
-  const product = await productModel.find({ isFeature: true });
-
-  res.send(product);
-}
 
 async function featureProductController(req, res) {
   const { id } = req.params;
@@ -167,6 +162,12 @@ async function featureProductController(req, res) {
   } catch (err) {
     return res.status(500).json({ success: false, msg: err.message || "Internal Server Error" });
   }
+}
+
+async function allFeatureProductController(req, res) {
+  const product = await productModel.find({ isFeature: true });
+
+  res.send(product);
 }
 
 
