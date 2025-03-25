@@ -56,9 +56,11 @@ const AllProduct = () => {
   };
 
   const getCategoryName = (categoryId) => {
-    const category = categories.find((category) => category._id);
-    let categoryName = category._id == categoryId;
-    return categoryName ? category.name : "No Category";
+    const id = Array.isArray(categoryId) ? categoryId[0] : categoryId;
+
+    const category = categories.find((cate) => cate._id === id);
+
+    return category ? category.name : "No Category";
   };
 
   const filteredProducts = products.filter((product) =>
@@ -122,8 +124,8 @@ const AllProduct = () => {
                 <td className="border p-2">
                   {getCategoryName(product.category)}
                 </td>
-                <td className="border p-2">${product.sellingPrice}</td>
-                <td className="border p-2">${product.discountPrice}</td>
+                <td className="border p-2">{product.sellingPrice} Tk</td>
+                <td className="border p-2">{product.discountPrice} Tk</td>
                 <td className="border p-2">
                   <button
                     onClick={() => handleDelete(product._id)}

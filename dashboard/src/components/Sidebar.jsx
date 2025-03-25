@@ -16,7 +16,7 @@ import {
   PowerIcon,
 } from "@heroicons/react/24/solid";
 import { TbCategoryPlus, TbCategoryFilled } from "react-icons/tb";
-import { MdAddShoppingCart, MdStoreMallDirectory } from "react-icons/md";
+import { MdAddShoppingCart, MdFeaturedPlayList, MdStoreMallDirectory } from "react-icons/md";
 import { Link } from "react-router";
 
 export function Sidebar() {
@@ -36,12 +36,6 @@ export function Sidebar() {
             Dashboard
           </ListItem>
         </Link>
-        <ListItem>
-          <ListItemPrefix>
-            <ShoppingBagIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          E-Commerce
-        </ListItem>
         <Link to="/addCategory">
           <ListItem>
             <ListItemPrefix>
@@ -72,6 +66,14 @@ export function Sidebar() {
               <MdStoreMallDirectory className="h-5 w-5" />
             </ListItemPrefix>
             All Products
+          </ListItem>
+        </Link>
+        <Link to="/feature">
+          <ListItem>
+            <ListItemPrefix>
+              <MdFeaturedPlayList className="h-5 w-5" />
+            </ListItemPrefix>
+            Feature Status
           </ListItem>
         </Link>
 
