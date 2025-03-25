@@ -1,12 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { Bounce, toast } from "react-toastify";
 
 const SingleProduct = () => {
   let { id } = useParams();
   const [productDetails, setProductDetails] = useState({});
   const [productImage, setProductImage] = useState([]);
-  const [activeImage, setActiveImage] = useState(0)
+  const [activeImage, setActiveImage] = useState(0);
+  const data = useSelector((state) => state.user.value);
 
   useEffect(() => {
     const getSingleProduct = () => {
@@ -14,7 +17,7 @@ const SingleProduct = () => {
         .get(`http://localhost:5000/api/v1/product/singleProduct/${id}`)
         .then((response) => {
           setProductDetails(response.data.data);
-          setProductImage(response.data.data.image || [])
+          setProductImage(response.data.data.image || []);
         })
         .catch((err) => {
           console.log(err);
@@ -22,6 +25,34 @@ const SingleProduct = () => {
     };
     getSingleProduct();
   }, [id]);
+
+  const handleAddtoCart = (item) => {
+    if (!data) {
+      return alert("Please Login Your Account");
+    } else {
+      axios
+        .post("http://localhost:5000/api/v1/cart/addtoCart", {
+          user: data._id,
+          products: item._id,
+        })
+        .then(() => {
+          toast.success("Add Cart Success", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
   return (
     <div>
       <div className="p-4">
@@ -31,7 +62,8 @@ const SingleProduct = () => {
               <div className="flex flex-row gap-2">
                 <div className="max-sm:w-14 flex w-16 shrink-0 flex-col gap-2">
                   {productImage.map((item, index) => (
-                    <img onClick={()=>setActiveImage(index)}
+                    <img
+                      onClick={() => setActiveImage(index)}
                       src={item}
                       alt={productDetails.name}
                       className="aspect-[64/85] w-full cursor-pointer border-b-2 border-black object-cover object-top"
@@ -113,6 +145,7 @@ const SingleProduct = () => {
                 </div>
                 <div className="mt-6 flex flex-wrap gap-4">
                   <button
+                    onClick={() => handleAddtoCart(productDetails)}
                     type="button"
                     className="w-[45%] border border-teal-600 bg-teal-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700"
                   >
@@ -121,27 +154,6 @@ const SingleProduct = () => {
                 </div>
               </div>
               <hr className="border-slate-300 my-6" />
-              {/* <div>
-                <h3 className="text-slate-900 text-lg font-semibold sm:text-xl">
-                  Select Delivery Location
-                </h3>
-                <p className="text-slate-500 mt-2 text-sm">
-                  Enter the pincode of your area to check product availability.
-                </p>
-                <div className="mt-6 flex max-w-sm items-center gap-2">
-                  <input
-                    type="number"
-                    placeholder="Enter pincode"
-                    className="bg-slate-100 w-full border-0 px-4 py-2.5 text-sm outline-0"
-                  />
-                  <button
-                    type="button"
-                    className="border-0 bg-blue-600 px-4 py-2.5 text-sm text-white outline-0 hover:bg-blue-700"
-                  >
-                    Apply
-                  </button>
-                </div>
-              </div> */}
               <hr className="border-slate-300 my-6" />
               <div>
                 <h3 className="text-slate-900 text-lg font-semibold sm:text-xl">
@@ -349,7 +361,7 @@ const SingleProduct = () => {
                 </div>
                 <a
                   href="javascript:void(0)"
-                  className="mt-6 block text-sm font-semibold fill-teal-600 hover:underline"
+                  className="mt-6 block fill-teal-600 text-sm font-semibold hover:underline"
                 >
                   Read all reviews
                 </a>

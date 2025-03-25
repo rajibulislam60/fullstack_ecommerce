@@ -1,12 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
+import { Bounce, toast } from "react-toastify";
 
 const Cart = () => {
   const navigate = useNavigate();
   const [cartList, setCartList] = useState([]);
-  // const [paymentMethod, setPaymentMethod] = useState("COD");
   const data = useSelector((state) => state.user.value);
   useEffect(() => {
     if (!data) {
@@ -31,7 +31,18 @@ const Cart = () => {
         `http://localhost:5000/api/v1/cart/cartproductDeleted/${item._id}`,
       )
       .then(() => {
-        alert("Item deleted");
+        setCartList((prevCartList) => prevCartList.filter((cartItem) => cartItem._id !== item._id));
+        toast.success("Product Deleted", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -46,33 +57,6 @@ const Cart = () => {
     navigate("/shop");
   };
 
-  // const handlePaymentStatus = (e) => {
-  //   setPaymentMethod(e.target.value);
-  // };
-
-  // const handleOrder = () => {
-  //   const cartItems = cartList.map((item) => {
-  //     return {
-  //       productid: item.products._id,
-  //     };
-  //   });
-  //   axios
-  //     .post("http://localhost:5000/api/v1/order/addOrder", {
-  //       user: data._id,
-  //       phone: "01760707877",
-  //       city: "Dhaka",
-  //       address: "Mirpur, Dhaka, Bangladesh",
-  //       paymentmethod: "COD",
-  //       cartItems: cartItems,
-  //       totalprice: TotalPricewithCOD,
-  //     })
-  //     .then((data) => {
-  //       console.log(data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
 
   const TotalPricewithCOD = totalPrice + 100;
 
@@ -87,7 +71,7 @@ const Cart = () => {
                 <div className="flex gap-4">
                   <div className="max-sm:w-24 max-sm:h-24 h-28 w-28 shrink-0">
                     <img
-                      src={item.products.image}
+                      src={item.products.image[0]}
                       className="h-full w-full object-contain"
                     />
                   </div>
@@ -184,44 +168,6 @@ const Cart = () => {
                 Total <span className="ml-auto">{TotalPricewithCOD} Tk</span>
               </li>
             </ul>
-            {/* <div>
-              <>
-                <div className="mb-4 mt-4 flex items-center">
-                  <input
-                    onChange={handlePaymentStatus}
-                    id="default-radio-1"
-                    checked={paymentMethod === "COD"}
-                    type="radio"
-                    defaultValue="COD"
-                    name="default-radio"
-                    className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                  />
-                  <label
-                    htmlFor="default-radio-1"
-                    className="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300"
-                  >
-                    Cash On Delivery
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    onChange={handlePaymentStatus}
-                    id="default-radio-2"
-                    checked={paymentMethod === "Online"}
-                    type="radio"
-                    defaultValue="Online"
-                    name="default-radio"
-                    className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                  />
-                  <label
-                    htmlFor="default-radio-2"
-                    className="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300"
-                  >
-                    Online
-                  </label>
-                </div>
-              </>
-            </div> */}
             <div className="mt-8 space-y-2">
               <Link to="/checkout">
                 <button

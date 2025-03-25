@@ -2,6 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { Bounce, toast } from "react-toastify";
 
 const Products = ({ products }) => {
   const data = useSelector((state) => state.user.value);
@@ -11,14 +12,23 @@ const Products = ({ products }) => {
     if (!data) {
       return alert("Please Login Your Account");
     } else {
-      console.log("click", item);
       axios
         .post("http://localhost:5000/api/v1/cart/addtoCart", {
           user: data._id,
           products: item._id,
         })
         .then((data) => {
-          console.log(data);
+          toast.success("Add Cart Success", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
         })
         .catch((err) => {
           console.log(err);
