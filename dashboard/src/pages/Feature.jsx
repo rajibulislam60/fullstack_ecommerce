@@ -23,7 +23,6 @@ export default function Dashboard() {
   const toggleFeatured = async (id) => {
     try {
       const { data } = await axios.put(`http://localhost:5000/api/v1/product/isFeature/${id}`);
-      console.log("Success:", data); // Debugging
       alert(data.msg);
       fetchProducts();
     } catch (error) {
@@ -38,8 +37,8 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <h2 className="text-3xl font-bold mb-4">Dashboard - Manage Products</h2>
+    <div className="p-6 w-full mx-auto">
+      <h2 className="text-3xl font-bold mb-4">Feature Products Select Area</h2>
       {loading ? (
         <p className="text-center">Loading products...</p>
       ) : (
@@ -56,8 +55,19 @@ export default function Dashboard() {
             {products.length > 0 ? (
               products.map((product) => (
                 <tr key={product._id} className="text-center">
+                  <td className="border p-2">
+                  <img
+                    src={
+                      Array.isArray(product.image) && product.image.length > 0
+                        ? product.image[0]
+                        : product.image || "https://via.placeholder.com/100"
+                    }
+                    alt={product.name}
+                    className="h-16 w-16 rounded object-cover"
+                  />
+                </td> 
                   <td className="border p-2">{product.name}</td>
-                  <td className="border p-2">${product.price}</td>
+                  <td className="border p-2">{product.discountPrice} Tk</td>
                   <td className="border p-2">
                     {product.isFeature ? (
                       <span className="text-green-600 font-semibold">Featured</span>

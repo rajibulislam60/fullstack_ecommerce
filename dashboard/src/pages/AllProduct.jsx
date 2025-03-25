@@ -124,8 +124,8 @@ const AllProduct = () => {
                 <td className="border p-2">
                   {getCategoryName(product.category)}
                 </td>
-                <td className="border p-2">${product.sellingPrice}</td>
-                <td className="border p-2">${product.discountPrice}</td>
+                <td className="border p-2">{product.sellingPrice} Tk</td>
+                <td className="border p-2">{product.discountPrice} Tk</td>
                 <td className="border p-2">
                   <button
                     onClick={() => handleDelete(product._id)}
