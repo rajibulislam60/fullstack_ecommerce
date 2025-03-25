@@ -7,6 +7,7 @@ import { Bounce, toast } from "react-toastify";
 const Cart = () => {
   const navigate = useNavigate();
   const [cartList, setCartList] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
   const data = useSelector((state) => state.user.value);
 
   useEffect(() => {
@@ -31,10 +32,12 @@ const Cart = () => {
 
   const handleRemoveCartProduct = (item) => {
     axios
-      .delete(`http://localhost:5000/api/v1/cart/cartproductDeleted/${item._id}`)
+      .delete(
+        `http://localhost:5000/api/v1/cart/cartproductDeleted/${item._id}`,
+      )
       .then(() => {
         setCartList((prevCartList) =>
-          prevCartList.filter((cartItem) => cartItem._id !== item._id)
+          prevCartList.filter((cartItem) => cartItem._id !== item._id),
         );
         toast.success("Product Deleted", {
           position: "top-center",
@@ -52,45 +55,43 @@ const Cart = () => {
       });
   };
 
-  // const handleIncrement = (item) => {
-  //   console.log(item)
-  //   axios
-  //     .patch(`http://localhost:5000/api/v1/cart/productIncrement/${item._id}`)
-  //     .then((response) => {
-  //       console.log(response)
-  //       // setCartList((prevList) =>
-  //       //   prevList.map((cartItem) =>
-  //       //     cartItem._id === item._id
-  //       //       ? { ...cartItem, quantity: cartItem.quantity + 1 }
-  //       //       : cartItem
-  //       //   )
-  //       // );
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // };
+  let handleIncrement = (item) => {
+    axios
+      .patch(`http://localhost:5000/api/v1/cart/productIncrement/${item._id}`)
+      .then(() => {
+        setCartItems((prevCartItems) =>
+          prevCartItems.map((cartItem) =>
+            cartItem._id === item._id
+              ? { ...cartItem, quantity: cartItem.quantity + 1 }
+              : cartItem
+          )
+        );
+      })
+      .catch((err) => {
+        console.error('Error incrementing product:', err.message);
+      });
+  };
 
-  // const handleDecrement = (item) => {
-  //   axios
-  //     .patch(`http://localhost:5000/api/v1/cart/productDecrement/${item._id}`)
-  //     .then(() => {
-  //       setCartList((prevList) =>
-  //         prevList.map((cartItem) =>
-  //           cartItem._id === item._id && cartItem.quantity > 1
-  //             ? { ...cartItem, quantity: cartItem.quantity - 1 }
-  //             : cartItem
-  //         )
-  //       );
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // };
-
+  let handleDecrement = (item) => {
+    axios
+      .patch(`http://localhost:5000/api/v1/cart/productDEcrement/${item._id}`)
+      .then(() => {
+        setCartItems((prevCartItems) =>
+          prevCartItems.map((cartItem) =>
+            cartItem._id === item._id
+              ? { ...cartItem, quantity: cartItem.quantity - 1 }
+              : cartItem
+          )
+        );
+      })
+      .catch((err) => {
+        console.error('Error incrementing product:', err.message);
+      });
+  };
+  
   const totalPrice = cartList.reduce(
     (total, item) => total + item.products.discountPrice * item.quantity,
-    0
+    0,
   );
 
   const handleBackShopping = () => {
@@ -126,7 +127,7 @@ const Cart = () => {
                     </div>
                     <div className="mt-auto flex items-center gap-3">
                       <button
-                        onClick={() => handleIncrement(item)}
+                        onClick={() => handleDecrement(item)}
                         type="button"
                         className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-400 outline-none"
                       >
@@ -142,7 +143,7 @@ const Cart = () => {
                         {item.quantity}
                       </span>
                       <button
-                        onClick={() => handleDecrement(item)}
+                        onClick={() => handleIncrement(item)}
                         type="button"
                         className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-800 outline-none"
                       >

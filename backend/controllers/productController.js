@@ -10,10 +10,10 @@ const addProductController = async (req, res) => {
       name,
       description,
       sellingPrice,
-      discountPrice = 0, // Default value
+      discountPrice = 0,
       stock,
       category,
-      isFeature = false, // Default value
+      isFeature = false,
     } = req.body;
 
     if (!name || !description || !sellingPrice || !stock || !category) {

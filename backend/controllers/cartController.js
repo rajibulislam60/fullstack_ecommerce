@@ -45,11 +45,8 @@ async function getSingleUserCart(req, res) {
 
 async function cartproductIncrement(req, res) {
   let { id } = req.params;
-
   try {
-    const cart = await cartModel
-      .findOneAndUpdate({ _id: id })
-      .populate("products");
+    const cart = await cartModel.findOne({ _id: id }).populate("products");
 
     if (cart.products.stock > cart.quantity) {
       cart.quantity++;
@@ -71,7 +68,7 @@ async function cartproductDecrement(req, res) {
   let { id } = req.params;
 
   try {
-    const cart = await cartModel.findOneAndUpdate({ _id: id }).populate("products");
+    const cart = await cartModel.findOne({ _id: id }).populate("products");
     if (cart.quantity > 1) {
       cart.quantity--;
     }
