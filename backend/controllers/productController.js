@@ -185,25 +185,45 @@ const totalProductsController = async (req, res) => {
 const bestSellingProductsController = async (req, res) => {
   try {
     const bestSelling = await productModel.aggregate([
-      { $lookup: {
-          from: "orders", 
-          localField: "_id", 
-          foreignField: "products.productId", 
-          as: "orderDetails"
-      }},
-      { $unwind: "$orderDetails" },
-      { $group: { _id: "$name", sales: { $sum: "$orderDetails.quantity" } } },
-      { $sort: { sales: -1 } },
-      { $limit: 5 }
+      {
+        $lookup: {
+          from: "orders",
+          localField: "_id",
+          foreignField: "cartItems.productId",
+          as: "orderDetails",
+        },
+      },
+      { $unwind: { path: "$orderDetails", preserveNullAndEmptyArrays: true } }, // ✅ Preserve products with no orders
+      { $unwind: { path: "$orderDetails.cartItems", preserveNullAndEmptyArrays: true } }, // ✅ Preserve cart items
+      {
+        $group: {
+          _id: "$_id", // Group by product ID
+          name: { $first: "$name" }, // Get product name
+          sales: { $sum: { $ifNull: ["$orderDetails.cartItems.quantity", 0] } }, // ✅ If no sales, default to 0
+        },
+      },
+      { $sort: { sales: -1 } }, // Sort by sales in descending order
+      { $limit: 5 }, // Get top 5 best-selling products
     ]);
-    res.status(200).json({
-      success: true,
-      bestSelling,
-    });
+
+    // If no products are found or sales data is empty, return 0
+    if (bestSelling.length === 0) {
+      res.status(200).json({
+        success: true,
+        bestSelling: [{ name: "No Products Sold", sales: 0 }],
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        bestSelling,
+      });
+    }
   } catch (err) {
     res.status(500).json({ success: false, msg: err.message || err });
   }
 };
+
+
 
 
 
